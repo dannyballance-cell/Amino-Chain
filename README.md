@@ -20,7 +20,9 @@ new one, and remove/restore products — no code editing required.
     site runs (before you've saved anything from the admin panel)
 - `netlify.toml`, `package.json` — build/config for Netlify
 
-## One-time setup: set your admin password
+## One-time setup
+
+### 1. Set your admin password
 
 The admin panel is protected by a single password you choose — Netlify has
 no separate login system, so this keeps it simple.
@@ -35,9 +37,27 @@ no separate login system, so this keeps it simple.
    so it can't be forged. If you skip this, the site falls back to using
    your admin password for that too, which still works but is slightly
    weaker.
-4. Click **Save**, then trigger a new deploy (Netlify usually does this
-   automatically after you save env vars — if not, go to **Deploys** →
-   **Trigger deploy** → **Deploy site**).
+
+### 2. Create a Blobs access token
+
+The site stores products and uploaded photos using Netlify Blobs, Netlify's
+built-in storage. On some accounts Netlify doesn't automatically hand
+Functions the credentials they need to reach it, so you create one token,
+once:
+
+1. Click your avatar (top right of Netlify) → **User settings**.
+2. Go to **Applications** → **Personal access tokens** → **New access
+   token**. Give it any description (e.g. "Amino Chain Blobs") and
+   generate it.
+3. Copy the token immediately — Netlify only shows it once.
+4. Back in your site → **Project configuration** → **Environment
+   variables**, add a variable named `BLOBS_TOKEN` with that token as the
+   value.
+
+### 3. Redeploy
+
+Save the environment variables, then trigger a new deploy so the functions
+pick them up: **Deploys** → **Trigger deploy** → **Deploy site**.
 
 ## Using the admin panel
 

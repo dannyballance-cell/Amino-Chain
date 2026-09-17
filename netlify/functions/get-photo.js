@@ -1,6 +1,6 @@
 "use strict";
 
-const { getStore } = require("@netlify/blobs");
+const { getBlobStore } = require("./utils/blobs");
 
 exports.handler = async (event) => {
   try {
@@ -9,7 +9,7 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: "Bad key" };
     }
 
-    const store = getStore("amino-chain");
+    const store = getBlobStore();
     const blob = await store.get(key, { type: "arrayBuffer" });
     if (!blob) {
       return { statusCode: 404, body: "Not found" };

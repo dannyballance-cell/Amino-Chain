@@ -1,7 +1,7 @@
 "use strict";
 
 const crypto = require("crypto");
-const { getStore } = require("@netlify/blobs");
+const { getBlobStore } = require("./utils/blobs");
 const { isAuthed } = require("./utils/auth");
 
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
 
     let store;
     try {
-      store = getStore("amino-chain");
+      store = getBlobStore();
       await store.set(key, buffer, { metadata: { contentType } });
     } catch (err) {
       return {

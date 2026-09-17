@@ -1,6 +1,6 @@
 "use strict";
 
-const { getStore } = require("@netlify/blobs");
+const { getBlobStore } = require("./utils/blobs");
 const { isAuthed } = require("./utils/auth");
 
 exports.handler = async (event) => {
@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     }
 
     try {
-      const store = getStore("amino-chain");
+      const store = getBlobStore();
       await store.setJSON("products", products);
     } catch (err) {
       return {

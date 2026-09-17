@@ -1,11 +1,11 @@
 "use strict";
 
-const { getStore } = require("@netlify/blobs");
+const { getBlobStore } = require("./utils/blobs");
 const { DEFAULT_PRODUCTS } = require("./products-data");
 
 exports.handler = async () => {
   try {
-    const store = getStore("amino-chain");
+    const store = getBlobStore();
     const data = await store.get("products", { type: "json" });
     if (data && Array.isArray(data) && data.length) {
       return {
