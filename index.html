@@ -270,6 +270,29 @@
   .catalog-row .benefit{font-size:.82rem;color:var(--bone-dim);max-width:42ch;}
   .catalog-row .meta{display:flex;align-items:center;gap:10px;flex:none;}
   .catalog-row .dose{font-family:var(--font-mono);font-size:.78rem;color:var(--gold);white-space:nowrap;}
+  .name-wrap.editable{gap:4px;}
+  .name-wrap.editable input.name-input{
+    font-family:inherit;font-weight:700;font-size:.96rem;color:var(--bone);
+    background:none;border:1px solid transparent;border-radius:4px;
+    padding:2px 4px;margin:-2px -4px;width:100%;
+  }
+  .name-wrap.editable input.name-input:hover{border-color:var(--line);}
+  .name-wrap.editable input.name-input:focus{outline:none;border-color:var(--gold);background:var(--surface);}
+  .name-wrap.editable textarea.benefit-input{
+    font-family:inherit;font-size:.82rem;color:var(--bone-dim);
+    background:none;border:1px solid transparent;border-radius:4px;
+    padding:2px 4px;margin:-2px -4px;width:100%;max-width:42ch;
+    line-height:1.4;resize:vertical;
+  }
+  .name-wrap.editable textarea.benefit-input:hover{border-color:var(--line);}
+  .name-wrap.editable textarea.benefit-input:focus{outline:none;border-color:var(--gold);background:var(--surface);}
+  .catalog-row .meta input.dose-input{
+    font-family:var(--font-mono);font-size:.78rem;color:var(--gold);
+    background:none;border:1px solid transparent;border-radius:4px;
+    padding:2px 4px;margin:-2px -4px;width:9ch;text-align:right;
+  }
+  .catalog-row .meta input.dose-input:hover{border-color:var(--line);}
+  .catalog-row .meta input.dose-input:focus{outline:none;border-color:var(--gold);background:var(--surface);}
   .catalog-admin-hint{
     font-size:.82rem;color:var(--gold-dim);
     margin:-24px 0 32px;
@@ -649,7 +672,7 @@
 
       <div class="admin-toolbar" id="admin-toolbar" hidden>
         <span class="admin-status" id="admin-status-text">Admin mode</span>
-        <span>Drag a row to reorder within its category. Click a photo to change it. Click the status pill to cycle stock status.</span>
+        <span>Drag a row to reorder within its category. Click a photo to change it. Click the status pill to cycle stock status. Click a name, description, or dose to edit it.</span>
         <div class="admin-toolbar-actions">
           <button type="button" class="btn btn-primary btn-sm" id="admin-save-btn" disabled>Save changes</button>
           <button type="button" class="btn btn-secondary btn-sm" id="admin-signout-btn">Sign out</button>
@@ -1115,21 +1138,72 @@
 
     var nameWrap = document.createElement("div");
     nameWrap.className = "name-wrap";
-    var nameEl = document.createElement("span");
-    nameEl.className = "name";
-    nameEl.textContent = product.name;
-    var benefitEl = document.createElement("span");
-    benefitEl.className = "benefit";
-    benefitEl.textContent = product.benefit;
-    nameWrap.appendChild(nameEl);
-    nameWrap.appendChild(benefitEl);
+    if(state.isAdmin){
+      nameWrap.classList.add("editable");
+
+      var nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.className = "name-input";
+      nameInput.value = product.name;
+      nameInput.draggable = false;
+      nameInput.setAttribute("aria-label", "Product name");
+      nameInput.addEventListener("mousedown", function(e){ e.stopPropagation(); });
+      nameInput.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); nameInput.blur(); } });
+      nameInput.addEventListener("change", function(){
+        product.name = nameInput.value.trim() || product.name;
+        nameInput.value = product.name;
+        markDirty();
+      });
+
+      var benefitInput = document.createElement("textarea");
+      benefitInput.className = "benefit-input";
+      benefitInput.rows = 2;
+      benefitInput.value = product.benefit;
+      benefitInput.draggable = false;
+      benefitInput.setAttribute("aria-label", "Product description");
+      benefitInput.addEventListener("mousedown", function(e){ e.stopPropagation(); });
+      benefitInput.addEventListener("change", function(){
+        product.benefit = benefitInput.value.trim() || product.benefit;
+        benefitInput.value = product.benefit;
+        markDirty();
+      });
+
+      nameWrap.appendChild(nameInput);
+      nameWrap.appendChild(benefitInput);
+    } else {
+      var nameEl = document.createElement("span");
+      nameEl.className = "name";
+      nameEl.textContent = product.name;
+      var benefitEl = document.createElement("span");
+      benefitEl.className = "benefit";
+      benefitEl.textContent = product.benefit;
+      nameWrap.appendChild(nameEl);
+      nameWrap.appendChild(benefitEl);
+    }
 
     var meta = document.createElement("div");
     meta.className = "meta";
-    var doseEl = document.createElement("span");
-    doseEl.className = "dose";
-    doseEl.textContent = product.dose;
-    meta.appendChild(doseEl);
+    if(state.isAdmin){
+      var doseInput = document.createElement("input");
+      doseInput.type = "text";
+      doseInput.className = "dose-input";
+      doseInput.value = product.dose;
+      doseInput.draggable = false;
+      doseInput.setAttribute("aria-label", "Dose");
+      doseInput.addEventListener("mousedown", function(e){ e.stopPropagation(); });
+      doseInput.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); doseInput.blur(); } });
+      doseInput.addEventListener("change", function(){
+        product.dose = doseInput.value.trim() || product.dose;
+        doseInput.value = product.dose;
+        markDirty();
+      });
+      meta.appendChild(doseInput);
+    } else {
+      var doseEl = document.createElement("span");
+      doseEl.className = "dose";
+      doseEl.textContent = product.dose;
+      meta.appendChild(doseEl);
+    }
 
     if(!state.isAdmin && (product.status === "in-stock" || product.status === "low-stock")){
       var orderBtn = document.createElement("a");
