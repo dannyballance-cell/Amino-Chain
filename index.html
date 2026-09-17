@@ -720,6 +720,14 @@
         <p>Independent third-party testing for every lot, published here as soon as it's available.</p>
       </div>
 
+      <form class="coa-add-form" id="coa-add-form" hidden>
+        <label for="coa-label-input" class="visually-hidden">Certificate label</label>
+        <input type="text" id="coa-label-input" placeholder="Label (e.g. Vitamin D3 &mdash; Lot 0426)" required>
+        <label for="coa-file-input" class="visually-hidden">Certificate file</label>
+        <input type="file" id="coa-file-input" accept="application/pdf,image/*">
+        <button type="submit" class="btn btn-primary btn-sm">Add certificate</button>
+      </form>
+
       <div class="coa-list" id="coa-list"></div>
       <p class="coa-empty" id="coa-empty">No certificates published yet &mdash; check back once testing is complete.</p>
     </div>
@@ -927,7 +935,7 @@
   var PLACEHOLDER_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.8"/><path d="m21 15-5-5L5 21"/></svg>';
   var EDIT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
 
-  var state = { products: [], isAdmin: false, dragSlug: null };
+  var state = { products: [], coas: [], isAdmin: false, dragSlug: null };
   var dirty = false;
 
   function cloneDefaults(){
@@ -1319,6 +1327,183 @@
     if(toolbar) toolbar.hidden = !state.isAdmin;
     var trashZone = document.getElementById("trash-zone");
     if(trashZone) trashZone.hidden = !state.isAdmin;
+
+    renderCoas();
+  }
+
+  /* ---------- certificates of analysis ---------- */
+  var PDF_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+
+  function loadCoas(){
+    return fetch("/api/get-coas").then(function(res){
+      if(!res.ok) throw new Error("bad response");
+      return res.json();
+    }).then(function(data){
+      return Array.isArray(data) ? data : [];
+    }).catch(function(){
+      return [];
+    });
+  }
+
+  function saveCoas(){
+    return fetch("/api/save-coas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state.coas)
+    }).then(function(res){
+      if(!res.ok){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          throw new Error((data && data.error) || ("Save failed (status " + res.status + ")."));
+        });
+      }
+      return res.json();
+    });
+  }
+
+  function formatCoaDate(ts){
+    if(!ts) return "";
+    try{
+      return new Date(ts).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }catch(e){
+      return "";
+    }
+  }
+
+  function renderCoas(){
+    var list = document.getElementById("coa-list");
+    var empty = document.getElementById("coa-empty");
+    var addForm = document.getElementById("coa-add-form");
+    if(!list) return;
+
+    list.innerHTML = "";
+    state.coas.forEach(function(coa){
+      var card = document.createElement("div");
+      card.className = "coa-card";
+
+      var icon = document.createElement("div");
+      icon.className = "coa-icon";
+      if(coa.fileType === "image"){
+        var img = document.createElement("img");
+        img.src = coa.url;
+        img.alt = coa.label;
+        icon.appendChild(img);
+      } else {
+        icon.innerHTML = PDF_ICON;
+      }
+
+      var info = document.createElement("div");
+      info.className = "coa-info";
+      var labelEl = document.createElement("span");
+      labelEl.className = "coa-label";
+      labelEl.textContent = coa.label;
+      var metaEl = document.createElement("span");
+      metaEl.className = "coa-meta";
+      metaEl.textContent = formatCoaDate(coa.uploadedAt);
+      info.appendChild(labelEl);
+      info.appendChild(metaEl);
+
+      var actions = document.createElement("div");
+      actions.className = "coa-actions";
+      var viewLink = document.createElement("a");
+      viewLink.className = "coa-view-link";
+      viewLink.href = coa.url;
+      viewLink.target = "_blank";
+      viewLink.rel = "noopener";
+      viewLink.textContent = "View";
+      actions.appendChild(viewLink);
+
+      if(state.isAdmin){
+        var removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "coa-remove-btn";
+        removeBtn.textContent = "Remove";
+        removeBtn.addEventListener("click", function(){
+          state.coas = state.coas.filter(function(c){ return c.id !== coa.id; });
+          renderCoas();
+          setAdminStatus("Removing certificate…");
+          saveCoas().then(function(){
+            setAdminStatus("Certificate removed.");
+          }).catch(function(err){
+            setAdminStatus(err.message || "Couldn't remove that certificate — try again.");
+          });
+        });
+        actions.appendChild(removeBtn);
+      }
+
+      card.appendChild(icon);
+      card.appendChild(info);
+      card.appendChild(actions);
+      list.appendChild(card);
+    });
+
+    if(empty) empty.hidden = state.coas.length > 0;
+    if(addForm) addForm.hidden = !state.isAdmin;
+  }
+
+  var coaAddForm = document.getElementById("coa-add-form");
+  if(coaAddForm){
+    coaAddForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var labelInput = document.getElementById("coa-label-input");
+      var fileInput = document.getElementById("coa-file-input");
+      var label = (labelInput.value || "").trim();
+      var file = fileInput.files && fileInput.files[0];
+
+      if(!label){
+        setAdminStatus("Give the certificate a label first.");
+        return;
+      }
+      if(!file){
+        setAdminStatus("Choose a PDF or image file first.");
+        return;
+      }
+      if(!/^(application\/pdf|image\/)/.test(file.type)){
+        setAdminStatus("Please choose a PDF or image file.");
+        return;
+      }
+      if(file.size > 8 * 1024 * 1024){
+        setAdminStatus("That file is larger than 8MB — choose a smaller one.");
+        return;
+      }
+
+      setAdminStatus("Uploading certificate…");
+      var reader = new FileReader();
+      reader.onerror = function(){
+        setAdminStatus("Couldn't read that file — try again.");
+      };
+      reader.onload = function(){
+        fetch("/api/upload-coa", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ dataUrl: reader.result })
+        }).then(function(res){
+          if(!res.ok){
+            return res.json().catch(function(){ return {}; }).then(function(data){
+              throw new Error((data && data.error) || ("Upload failed (status " + res.status + ")."));
+            });
+          }
+          return res.json();
+        }).then(function(data){
+          state.coas.push({
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+            label: label,
+            url: data.url,
+            fileType: data.fileType,
+            uploadedAt: Date.now()
+          });
+          renderCoas();
+          labelInput.value = "";
+          fileInput.value = "";
+          setAdminStatus("Certificate uploaded — saving…");
+          return saveCoas();
+        }).then(function(){
+          setAdminStatus("Certificate added and live for everyone.");
+        }).catch(function(err){
+          setAdminStatus(err.message || "Couldn't add that certificate — try again.");
+        });
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   /* ---------- admin sign-in / sign-out ---------- */
@@ -1420,9 +1605,10 @@
     }
   });
 
-  Promise.all([loadProducts(), checkAuth()]).then(function(results){
+  Promise.all([loadProducts(), checkAuth(), loadCoas()]).then(function(results){
     state.products = results[0];
     state.isAdmin = results[1];
+    state.coas = results[2];
     renderAll();
   });
 })();
