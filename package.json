@@ -1,0 +1,9 @@
+{
+  "name": "amino-chain-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Amino Chain Performance static site + Netlify Functions admin backend",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
