@@ -951,15 +951,19 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(state.products)
     }).then(function(res){
-      if(!res.ok) throw new Error("save failed");
+      if(!res.ok){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          throw new Error((data && data.error) || ("Save failed (status " + res.status + ")."));
+        });
+      }
       return res.json();
     }).then(function(){
       dirty = false;
       var btn = document.getElementById("admin-save-btn");
       if(btn) btn.disabled = true;
       setAdminStatus("Saved — changes are live for everyone.");
-    }).catch(function(){
-      setAdminStatus("Save failed — check your connection and try again.");
+    }).catch(function(err){
+      setAdminStatus(err.message || "Save failed — check your connection and try again.");
     });
   }
 
@@ -980,17 +984,56 @@
   hiddenFileInput.addEventListener("change", function(){
     var file = hiddenFileInput.files && hiddenFileInput.files[0];
     if(!file || !pendingPhotoProduct) return;
-    if(file.size > 5 * 1024 * 1024){
-      setAdminStatus("That image is larger than 5MB — choose a smaller file.");
+    if(!/^image\//.test(file.type)){
+      setAdminStatus("Please choose an image file.");
       return;
     }
-    var reader = new FileReader();
+    if(file.size > 25 * 1024 * 1024){
+      setAdminStatus("That image is too large — choose a smaller file.");
+      return;
+    }
     var product = pendingPhotoProduct;
-    reader.onload = function(){
-      uploadPhoto(product, reader.result);
-    };
-    reader.readAsDataURL(file);
+    setAdminStatus("Processing photo…");
+    resizeImageFile(file, 900, 0.82).then(function(dataUrl){
+      uploadPhoto(product, dataUrl);
+    }).catch(function(){
+      setAdminStatus("Couldn't read that image — try a different file.");
+    });
   });
+
+  // Product photos only ever render as small thumbnails, so we downscale
+  // and re-compress in the browser before uploading. This keeps the upload
+  // fast and well under any serverless function payload limit, regardless
+  // of how large the original photo (e.g. straight off a phone) was.
+  function resizeImageFile(file, maxDim, quality){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onerror = function(){ reject(new Error("Couldn't read the file.")); };
+      reader.onload = function(){
+        var img = new Image();
+        img.onerror = function(){ reject(new Error("Couldn't decode that image.")); };
+        img.onload = function(){
+          var w = img.naturalWidth || img.width;
+          var h = img.naturalHeight || img.height;
+          var scale = Math.min(1, maxDim / Math.max(w, h));
+          var outW = Math.max(1, Math.round(w * scale));
+          var outH = Math.max(1, Math.round(h * scale));
+          var canvas = document.createElement("canvas");
+          canvas.width = outW;
+          canvas.height = outH;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, outW, outH);
+          try{
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          }catch(e){
+            reject(e);
+          }
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
   function uploadPhoto(product, dataUrl){
     setAdminStatus("Uploading photo…");
@@ -999,15 +1042,19 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dataUrl: dataUrl, slug: product.slug })
     }).then(function(res){
-      if(!res.ok) throw new Error("upload failed");
+      if(!res.ok){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          throw new Error((data && data.error) || ("Upload failed (status " + res.status + ")."));
+        });
+      }
       return res.json();
     }).then(function(data){
       product.photo = data.url;
       markDirty();
       renderAll();
       setAdminStatus("Photo uploaded — click Save changes to publish it.");
-    }).catch(function(){
-      setAdminStatus("Photo upload failed — try again.");
+    }).catch(function(err){
+      setAdminStatus(err.message || "Photo upload failed — try again.");
     });
   }
 
