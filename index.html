@@ -129,6 +129,26 @@
   .nav-links a:hover,.nav-links a:focus-visible{color:var(--bone);}
   @media (min-width:860px){ .nav-links{display:flex;} }
 
+  .nav-actions{display:flex;align-items:center;gap:12px;}
+  .cart-toggle{
+    position:relative;
+    appearance:none;border:1px solid var(--line);background:none;cursor:pointer;
+    color:var(--bone);padding:.55em;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .15s ease,color .15s ease;
+  }
+  .cart-toggle:hover{border-color:var(--gold);color:var(--gold);}
+  .cart-toggle svg{width:19px;height:19px;}
+  .cart-count{
+    position:absolute;top:-6px;right:-6px;
+    background:linear-gradient(135deg,var(--molten),var(--ember));
+    color:var(--ink);font-size:.66rem;font-weight:800;
+    min-width:18px;height:18px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    padding:0 3px;
+  }
+  .cart-count[hidden]{display:none;}
+
   /* ---------- hero ---------- */
   .hero{position:relative;overflow:hidden;padding-block:60px 64px;isolation:isolate;}
   @media (min-width:760px){ .hero{padding-block:88px 90px;} }
@@ -565,6 +585,84 @@
   .admin-toolbar .admin-status{font-weight:700;color:var(--gold);}
   .admin-toolbar-actions{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap;}
 
+  /* ---------- product detail + cart modals ---------- */
+  .catalog-row.clickable{cursor:pointer;}
+  .catalog-row.clickable:hover{background:rgba(212,162,76,0.05);}
+
+  .product-modal, .cart-modal{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(20,15,11,0.78);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+  }
+  .product-modal[hidden], .cart-modal[hidden]{display:none;}
+  .product-modal-card, .cart-modal-card{
+    position:relative;
+    background:var(--ink-2);border:1px solid var(--line-bright);border-radius:10px;
+    padding:32px 28px;max-width:420px;width:100%;
+    max-height:86vh;overflow-y:auto;
+  }
+  .product-modal-close, .cart-modal-close{
+    position:absolute;top:10px;right:14px;
+    background:none;border:none;color:var(--bone-dim);font-size:1.5rem;cursor:pointer;line-height:1;
+    padding:4px;
+  }
+  .product-modal-close:hover, .cart-modal-close:hover{color:var(--bone);}
+
+  .product-modal-thumb{
+    width:100%;aspect-ratio:16/10;border-radius:8px;overflow:hidden;
+    background:var(--surface);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--bone-dim);
+    margin-bottom:18px;
+  }
+  .product-modal-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .product-modal-thumb svg{width:40px;height:40px;}
+  .product-modal-card h3{font-size:1.4rem;margin-bottom:6px;padding-right:20px;}
+  .product-modal-dose{font-family:var(--font-mono);font-size:.82rem;color:var(--gold);margin-bottom:14px;}
+  .product-modal-benefit{color:var(--bone-dim);font-size:.94rem;margin-bottom:14px;}
+  .product-modal-status{margin-bottom:20px;}
+  .product-modal-qty{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+  .product-modal-qty label{font-size:.78rem;color:var(--bone-dim);font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+  .product-modal-add-btn{width:100%;}
+
+  .qty-stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:20px;overflow:hidden;flex:none;}
+  .qty-stepper button{
+    appearance:none;border:none;background:none;color:var(--bone);
+    width:32px;height:32px;font-size:1.1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .qty-stepper button:hover{color:var(--gold);}
+  .qty-stepper input[type="number"]{
+    width:36px;text-align:center;background:none;border:none;color:var(--bone);
+    font-family:inherit;font-size:.92rem;
+    -moz-appearance:textfield;
+  }
+  .qty-stepper input[type="number"]::-webkit-outer-spin-button,
+  .qty-stepper input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .qty-stepper.small{border-radius:16px;}
+  .qty-stepper.small button{width:26px;height:26px;font-size:.95rem;}
+  .qty-stepper.small .cart-qty-value{width:22px;text-align:center;font-size:.84rem;}
+
+  .cart-modal-card h3{font-size:1.3rem;margin-bottom:18px;color:var(--gold);}
+  .cart-items{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line);margin-bottom:16px;}
+  .cart-item{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  .cart-item-info{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
+  .cart-item-name{font-weight:700;font-size:.9rem;}
+  .cart-item-dose{font-family:var(--font-mono);font-size:.74rem;color:var(--bone-dim);}
+  .cart-item-remove{
+    appearance:none;border:none;background:none;color:var(--bone-dim);
+    font-size:1.2rem;cursor:pointer;line-height:1;padding:4px;flex:none;
+  }
+  .cart-item-remove:hover{color:var(--danger);}
+  .cart-empty{color:var(--bone-dim);font-size:.9rem;text-align:center;padding:20px 0;}
+  .cart-empty[hidden]{display:none;}
+  .cart-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;}
+  .cart-total-count{font-size:.84rem;color:var(--bone-dim);}
+  .cart-status{margin-top:12px;font-size:.84rem;color:var(--bone-dim);min-height:1.2em;}
+
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important;}
   }
@@ -578,7 +676,13 @@
       <a href="#catalog">Catalog</a>
       <a href="#faq">FAQ</a>
     </div>
-    <a href="#catalog" class="btn btn-primary btn-sm">See Products</a>
+    <div class="nav-actions">
+      <button type="button" class="cart-toggle" id="cart-toggle" aria-label="View cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </button>
+      <a href="#catalog" class="btn btn-primary btn-sm">See Products</a>
+    </div>
   </nav>
 </header>
 
@@ -646,6 +750,15 @@
           <button type="button" class="btn btn-primary btn-sm" id="admin-save-btn" disabled>Save changes</button>
           <button type="button" class="btn btn-secondary btn-sm" id="admin-signout-btn">Sign out</button>
         </div>
+      </div>
+
+      <div class="order-requests-panel" id="order-requests-panel" hidden>
+        <div class="order-requests-head">
+          <h3>Order Requests <span class="count" id="order-requests-count"></span></h3>
+        </div>
+        <p class="admin-hint">Requests customers have submitted through the cart. Dismiss one once you've followed up.</p>
+        <div class="order-requests-list" id="order-requests-list"></div>
+        <p class="order-requests-empty" id="order-requests-empty">No order requests yet.</p>
       </div>
 
       <h3 class="catalog-single-heading">Products (Peppers)</h3>
@@ -798,6 +911,40 @@
   </div>
 </div>
 
+<div class="product-modal" id="product-modal" hidden>
+  <div class="product-modal-card">
+    <button type="button" class="product-modal-close" id="product-modal-close" aria-label="Close">&times;</button>
+    <div class="product-modal-thumb" id="product-modal-thumb"></div>
+    <h3 id="product-modal-name"></h3>
+    <p class="product-modal-dose" id="product-modal-dose"></p>
+    <p class="product-modal-benefit" id="product-modal-benefit"></p>
+    <div class="product-modal-status" id="product-modal-status"></div>
+    <div class="product-modal-qty">
+      <label for="product-modal-qty-input">Quantity</label>
+      <div class="qty-stepper">
+        <button type="button" id="product-modal-qty-minus" aria-label="Decrease quantity">&minus;</button>
+        <input type="number" id="product-modal-qty-input" value="1" min="1" max="99">
+        <button type="button" id="product-modal-qty-plus" aria-label="Increase quantity">+</button>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary product-modal-add-btn" id="product-modal-add-btn">Add to Cart</button>
+  </div>
+</div>
+
+<div class="cart-modal" id="cart-modal" hidden>
+  <div class="cart-modal-card">
+    <button type="button" class="cart-modal-close" id="cart-modal-close" aria-label="Close">&times;</button>
+    <h3>Your Cart</h3>
+    <div class="cart-items" id="cart-items"></div>
+    <p class="cart-empty" id="cart-empty">Your cart is empty.</p>
+    <div class="cart-footer">
+      <span class="cart-total-count" id="cart-total-count"></span>
+      <button type="button" class="btn btn-primary" id="cart-request-btn">Request to Order</button>
+    </div>
+    <p class="cart-status" id="cart-status" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -868,7 +1015,7 @@
   var PLACEHOLDER_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.8"/><path d="m21 15-5-5L5 21"/></svg>';
   var EDIT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
 
-  var state = { products: [], coas: [], isAdmin: false, dragSlug: null };
+  var state = { products: [], coas: [], orders: [], cart: [], isAdmin: false, dragSlug: null };
   var dirty = false;
 
   function cloneDefaults(){
@@ -1146,20 +1293,6 @@
       meta.appendChild(doseEl);
     }
 
-    if(!state.isAdmin && (product.status === "in-stock" || product.status === "low-stock")){
-      var orderBtn = document.createElement("a");
-      orderBtn.className = "order-btn";
-      orderBtn.textContent = "Request to order";
-      orderBtn.target = "_top";
-      orderBtn.href = buildMailto(
-        "Order request: " + product.name,
-        "Hi,\n\nI'd like to order " + product.name +
-          (product.dose ? " (" + product.dose + ")" : "") +
-          ".\n\nPlease let me know how to proceed.\n\nThanks!"
-      );
-      meta.appendChild(orderBtn);
-    }
-
     var pill = document.createElement("span");
     pill.className = "status-pill" + (state.isAdmin ? " editable" : "");
     pill.dataset.status = product.status;
@@ -1196,6 +1329,14 @@
     row.appendChild(thumb);
     row.appendChild(nameWrap);
     row.appendChild(meta);
+
+    if(!state.isAdmin){
+      row.classList.add("clickable");
+      row.addEventListener("click", function(){
+        openProductModal(product);
+      });
+    }
+
     return row;
   }
 
@@ -1262,6 +1403,7 @@
     if(trashZone) trashZone.hidden = !state.isAdmin;
 
     renderCoas();
+    renderOrderRequests();
   }
 
   /* ---------- certificates of analysis ---------- */
@@ -1439,6 +1581,372 @@
     });
   }
 
+  /* ---------- cart ---------- */
+  var CART_STORAGE_KEY = "aminoChainCart";
+
+  function loadCart(){
+    try{
+      var raw = window.localStorage.getItem(CART_STORAGE_KEY);
+      if(!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function persistCart(){
+    try{
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state.cart));
+    }catch(e){
+      // storage unavailable (private browsing, etc.) — cart still works for this visit
+    }
+  }
+
+  function cartTotalQty(){
+    return state.cart.reduce(function(sum, item){ return sum + item.qty; }, 0);
+  }
+
+  function addToCart(product, qty){
+    qty = Math.max(1, Math.min(99, Math.round(qty) || 1));
+    var existing = state.cart.find(function(item){ return item.slug === product.slug; });
+    if(existing){
+      existing.qty = Math.min(99, existing.qty + qty);
+    } else {
+      state.cart.push({ slug: product.slug, name: product.name, dose: product.dose, qty: qty });
+    }
+    persistCart();
+    renderCartBadge();
+  }
+
+  function updateCartQty(slug, qty){
+    var item = state.cart.find(function(i){ return i.slug === slug; });
+    if(!item) return;
+    qty = Math.round(qty);
+    if(qty <= 0){
+      state.cart = state.cart.filter(function(i){ return i.slug !== slug; });
+    } else {
+      item.qty = Math.min(99, qty);
+    }
+    persistCart();
+    renderCartBadge();
+    renderCart();
+  }
+
+  function removeFromCart(slug){
+    state.cart = state.cart.filter(function(i){ return i.slug !== slug; });
+    persistCart();
+    renderCartBadge();
+    renderCart();
+  }
+
+  function renderCartBadge(){
+    var badge = document.getElementById("cart-count");
+    if(!badge) return;
+    var total = cartTotalQty();
+    badge.textContent = String(total);
+    badge.hidden = total === 0;
+  }
+
+  function renderCart(){
+    var itemsEl = document.getElementById("cart-items");
+    var emptyEl = document.getElementById("cart-empty");
+    var totalEl = document.getElementById("cart-total-count");
+    var requestBtn = document.getElementById("cart-request-btn");
+    if(!itemsEl) return;
+
+    itemsEl.innerHTML = "";
+    state.cart.forEach(function(item){
+      var row = document.createElement("div");
+      row.className = "cart-item";
+
+      var info = document.createElement("div");
+      info.className = "cart-item-info";
+      var nameEl = document.createElement("span");
+      nameEl.className = "cart-item-name";
+      nameEl.textContent = item.name;
+      var doseEl = document.createElement("span");
+      doseEl.className = "cart-item-dose";
+      doseEl.textContent = item.dose || "";
+      info.appendChild(nameEl);
+      info.appendChild(doseEl);
+
+      var stepper = document.createElement("div");
+      stepper.className = "qty-stepper small";
+      var minus = document.createElement("button");
+      minus.type = "button";
+      minus.innerHTML = "&minus;";
+      minus.setAttribute("aria-label", "Decrease quantity");
+      minus.addEventListener("click", function(){ updateCartQty(item.slug, item.qty - 1); });
+      var qtyVal = document.createElement("span");
+      qtyVal.className = "cart-qty-value";
+      qtyVal.textContent = String(item.qty);
+      var plus = document.createElement("button");
+      plus.type = "button";
+      plus.textContent = "+";
+      plus.setAttribute("aria-label", "Increase quantity");
+      plus.addEventListener("click", function(){ updateCartQty(item.slug, item.qty + 1); });
+      stepper.appendChild(minus);
+      stepper.appendChild(qtyVal);
+      stepper.appendChild(plus);
+
+      var removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "cart-item-remove";
+      removeBtn.innerHTML = "&times;";
+      removeBtn.setAttribute("aria-label", "Remove " + item.name);
+      removeBtn.addEventListener("click", function(){ removeFromCart(item.slug); });
+
+      row.appendChild(info);
+      row.appendChild(stepper);
+      row.appendChild(removeBtn);
+      itemsEl.appendChild(row);
+    });
+
+    if(emptyEl) emptyEl.hidden = state.cart.length > 0;
+    if(totalEl){
+      var total = cartTotalQty();
+      totalEl.textContent = total === 0 ? "" : (total + (total === 1 ? " item" : " items"));
+    }
+    if(requestBtn) requestBtn.disabled = state.cart.length === 0;
+  }
+
+  function openCart(){
+    renderCart();
+    document.getElementById("cart-status").textContent = "";
+    var modal = document.getElementById("cart-modal");
+    if(modal) modal.hidden = false;
+  }
+  function closeCart(){
+    var modal = document.getElementById("cart-modal");
+    if(modal) modal.hidden = true;
+  }
+
+  function setCartStatus(text){
+    var el = document.getElementById("cart-status");
+    if(el) el.textContent = text;
+  }
+
+  function submitOrder(){
+    if(state.cart.length === 0) return;
+    var items = state.cart.map(function(item){
+      return { slug: item.slug, name: item.name, dose: item.dose || "", qty: item.qty };
+    });
+
+    setCartStatus("Sending your request…");
+
+    fetch("/api/submit-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: items })
+    }).catch(function(){
+      // best effort — the email below still goes out even if this fails
+    }).then(function(){
+      var lines = items.map(function(item){
+        return "- " + item.name + (item.dose ? " (" + item.dose + ")" : "") + " x" + item.qty;
+      });
+      var subject = "Order request (" + items.length + (items.length === 1 ? " item" : " items") + ")";
+      var body = "Hi,\n\nI'd like to order:\n\n" + lines.join("\n") + "\n\nPlease let me know how to proceed.\n\nThanks!";
+      window.location.href = buildMailto(subject, body);
+
+      state.cart = [];
+      persistCart();
+      renderCartBadge();
+      renderCart();
+      setCartStatus("Request sent — check the email that just opened to finish up.");
+    });
+  }
+
+  /* ---------- product detail modal ---------- */
+  var activeModalProduct = null;
+
+  function openProductModal(product){
+    activeModalProduct = product;
+
+    var thumb = document.getElementById("product-modal-thumb");
+    thumb.innerHTML = "";
+    if(product.photo){
+      var img = document.createElement("img");
+      img.src = product.photo;
+      img.alt = product.name;
+      thumb.appendChild(img);
+    } else {
+      thumb.innerHTML = PLACEHOLDER_ICON;
+    }
+
+    document.getElementById("product-modal-name").textContent = product.name;
+    document.getElementById("product-modal-dose").textContent = product.dose;
+    document.getElementById("product-modal-benefit").textContent = product.benefit;
+
+    var statusEl = document.getElementById("product-modal-status");
+    statusEl.innerHTML = "";
+    var pill = document.createElement("span");
+    pill.className = "status-pill";
+    pill.dataset.status = product.status;
+    pill.textContent = STATUS_LABEL[product.status] || STATUS_LABEL["coming-soon"];
+    statusEl.appendChild(pill);
+
+    document.getElementById("product-modal-qty-input").value = "1";
+
+    var addBtn = document.getElementById("product-modal-add-btn");
+    var available = product.status === "in-stock" || product.status === "low-stock";
+    addBtn.disabled = !available;
+    addBtn.textContent = available ? "Add to Cart" : "Not currently available";
+
+    var modal = document.getElementById("product-modal");
+    if(modal) modal.hidden = false;
+  }
+
+  function closeProductModal(){
+    var modal = document.getElementById("product-modal");
+    if(modal) modal.hidden = true;
+    activeModalProduct = null;
+  }
+
+  var productModal = document.getElementById("product-modal");
+  var productModalClose = document.getElementById("product-modal-close");
+  var productModalQtyInput = document.getElementById("product-modal-qty-input");
+  var productModalQtyMinus = document.getElementById("product-modal-qty-minus");
+  var productModalQtyPlus = document.getElementById("product-modal-qty-plus");
+  var productModalAddBtn = document.getElementById("product-modal-add-btn");
+
+  if(productModalClose){
+    productModalClose.addEventListener("click", closeProductModal);
+  }
+  if(productModal){
+    productModal.addEventListener("click", function(e){
+      if(e.target === productModal) closeProductModal();
+    });
+  }
+  if(productModalQtyMinus){
+    productModalQtyMinus.addEventListener("click", function(){
+      var v = Math.max(1, (parseInt(productModalQtyInput.value, 10) || 1) - 1);
+      productModalQtyInput.value = String(v);
+    });
+  }
+  if(productModalQtyPlus){
+    productModalQtyPlus.addEventListener("click", function(){
+      var v = Math.min(99, (parseInt(productModalQtyInput.value, 10) || 1) + 1);
+      productModalQtyInput.value = String(v);
+    });
+  }
+  if(productModalAddBtn){
+    productModalAddBtn.addEventListener("click", function(){
+      if(!activeModalProduct || productModalAddBtn.disabled) return;
+      var qty = parseInt(productModalQtyInput.value, 10) || 1;
+      addToCart(activeModalProduct, qty);
+      productModalAddBtn.textContent = "Added!";
+      setTimeout(function(){
+        if(productModalAddBtn) productModalAddBtn.textContent = "Add to Cart";
+      }, 1200);
+    });
+  }
+
+  var cartToggle = document.getElementById("cart-toggle");
+  var cartModal = document.getElementById("cart-modal");
+  var cartModalClose = document.getElementById("cart-modal-close");
+  if(cartToggle){
+    cartToggle.addEventListener("click", openCart);
+  }
+  if(cartModalClose){
+    cartModalClose.addEventListener("click", closeCart);
+  }
+  if(cartModal){
+    cartModal.addEventListener("click", function(e){
+      if(e.target === cartModal) closeCart();
+    });
+  }
+  var cartRequestBtn = document.getElementById("cart-request-btn");
+  if(cartRequestBtn){
+    cartRequestBtn.addEventListener("click", submitOrder);
+  }
+
+  /* ---------- admin: order requests ---------- */
+  function loadOrders(){
+    return fetch("/api/get-orders").then(function(res){
+      if(!res.ok) throw new Error("bad response");
+      return res.json();
+    }).then(function(data){
+      return Array.isArray(data) ? data : [];
+    }).catch(function(){
+      return [];
+    });
+  }
+
+  function saveOrders(){
+    return fetch("/api/save-orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state.orders)
+    }).then(function(res){
+      if(!res.ok){
+        return res.json().catch(function(){ return {}; }).then(function(data){
+          throw new Error((data && data.error) || ("Save failed (status " + res.status + ")."));
+        });
+      }
+      return res.json();
+    });
+  }
+
+  function formatOrderDate(ts){
+    if(!ts) return "";
+    try{
+      return new Date(ts).toLocaleString(undefined, { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    }catch(e){
+      return "";
+    }
+  }
+
+  function renderOrderRequests(){
+    var panel = document.getElementById("order-requests-panel");
+    var list = document.getElementById("order-requests-list");
+    var empty = document.getElementById("order-requests-empty");
+    var countEl = document.getElementById("order-requests-count");
+    if(!panel) return;
+
+    if(!state.isAdmin){
+      panel.hidden = true;
+      return;
+    }
+    panel.hidden = false;
+    if(countEl) countEl.textContent = state.orders.length ? "(" + state.orders.length + ")" : "";
+
+    list.innerHTML = "";
+    state.orders.slice().sort(function(a, b){ return (b.submittedAt || 0) - (a.submittedAt || 0); }).forEach(function(order){
+      var row = document.createElement("div");
+      row.className = "order-request-row";
+
+      var info = document.createElement("div");
+      info.className = "order-request-info";
+      var nameEl = document.createElement("span");
+      nameEl.className = "order-request-name";
+      nameEl.textContent = (order.items || []).map(function(item){
+        return item.qty + "x " + item.name;
+      }).join(", ") || "(no items)";
+      var metaEl = document.createElement("span");
+      metaEl.className = "order-request-meta";
+      metaEl.textContent = formatOrderDate(order.submittedAt);
+      info.appendChild(nameEl);
+      info.appendChild(metaEl);
+
+      var dismissBtn = document.createElement("button");
+      dismissBtn.type = "button";
+      dismissBtn.className = "order-request-dismiss";
+      dismissBtn.textContent = "Dismiss";
+      dismissBtn.addEventListener("click", function(){
+        state.orders = state.orders.filter(function(o){ return o.id !== order.id; });
+        renderOrderRequests();
+        saveOrders().catch(function(){ /* best effort */ });
+      });
+
+      row.appendChild(info);
+      row.appendChild(dismissBtn);
+      list.appendChild(row);
+    });
+
+    if(empty) empty.hidden = state.orders.length > 0;
+  }
+
   /* ---------- admin sign-in / sign-out ---------- */
   var adminModal = document.getElementById("admin-modal");
   var adminToggle = document.getElementById("admin-toggle");
@@ -1481,6 +1989,10 @@
         document.getElementById("admin-password").value = "";
         state.isAdmin = true;
         renderAll();
+        loadOrders().then(function(orders){
+          state.orders = orders;
+          renderOrderRequests();
+        });
       }).catch(function(err){
         adminModalError.textContent = err.message || "Incorrect password.";
         adminModalError.hidden = false;
@@ -1497,6 +2009,7 @@
     adminSignoutBtn.addEventListener("click", function(){
       fetch("/api/logout", { method: "POST" }).then(function(){
         state.isAdmin = false;
+        state.orders = [];
         dirty = false;
         renderAll();
       });
@@ -1538,11 +2051,20 @@
     }
   });
 
+  state.cart = loadCart();
+  renderCartBadge();
+
   Promise.all([loadProducts(), checkAuth(), loadCoas()]).then(function(results){
     state.products = results[0];
     state.isAdmin = results[1];
     state.coas = results[2];
     renderAll();
+    if(state.isAdmin){
+      loadOrders().then(function(orders){
+        state.orders = orders;
+        renderOrderRequests();
+      });
+    }
   });
 })();
 </script>

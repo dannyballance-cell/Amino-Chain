@@ -67,7 +67,9 @@ pick them up: **Deploys** → **Trigger deploy** → **Deploy site**.
 3. Once signed in you'll see a toolbar above the catalog and each product
    row gets new controls:
    - **Drag a row** up or down to reorder it within its category.
-   - **Click a product's photo** to upload a new one (max 5MB).
+   - **Click a product's photo** to upload a new one (max 5MB — it's
+     automatically shrunk in the browser before uploading).
+   - **Click the name, description, or dose** to edit that text directly.
    - **Click the status pill** (e.g. "Coming soon") to cycle it through
      Coming soon → In stock → Low stock → Out of stock.
    - **Click Remove** on a row to pull it from the public catalog (it moves
@@ -76,27 +78,42 @@ pick them up: **Deploys** → **Trigger deploy** → **Deploy site**.
      remove it.
 4. Click **Save changes** to publish everything to the live site. Changes
    aren't public until you save.
-5. Click **Sign out** when you're done. Your session also expires on its
+5. Further down, in **Certificates of Analysis**, add a label and a PDF or
+   image file and click **Add certificate** — this publishes immediately,
+   no separate Save needed.
+6. Also while signed in, an **Order Requests** panel appears above the
+   catalog listing every cart a customer has submitted (see below), with a
+   **Dismiss** button once you've followed up on one.
+7. Click **Sign out** when you're done. Your session also expires on its
    own after 12 hours.
 
 Anyone without the password just sees the normal public site — no admin
 controls, no sign-in prompt anywhere visible unless they click that small
 Admin link.
 
+## How customers order
+
+There's no "Request to order" button on individual products anymore.
+Instead:
+
+1. Clicking anywhere on a product row opens a popup with its full
+   description, dose, stock status, and a quantity stepper.
+2. **Add to Cart** adds it to a cart icon in the top nav (with a running
+   item count badge). The cart is remembered in the visitor's browser, so
+   it's still there if they come back later.
+3. From the cart (click the cart icon), they can adjust quantities, remove
+   items, and click **Request to Order** once.
+4. That one click does two things: saves the order to your **Order
+   Requests** admin panel, and opens the visitor's email app with one
+   message listing everything in the cart, addressed to
+   aminochain2026@gmail.com. Either one working is enough for you to see
+   the request — the two are redundant on purpose.
+
 ## Deploying changes to the code itself
 
 For anything beyond what the admin panel covers (new sections, copy
 changes, design tweaks), edit the files and push to this repo's `main`
 branch — Netlify redeploys automatically within a minute or two.
-
-## Notes
-
-- **Waitlist form & "Request to order" buttons** still open the visitor's
-  own email app addressed to aminochain2026@gmail.com. That part doesn't
-  need a backend and works the same as before.
-- **Certificates of Analysis** are still a static placeholder for now (no
-  admin upload yet) — say the word if you'd like that added the same way
-  the product photos work.
 - **Vitamin B12's original product photo** didn't carry over from earlier
   testing — just upload it again from the admin panel once your password is
   set up.
