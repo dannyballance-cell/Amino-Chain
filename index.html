@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
-<meta name="description" content="Amino Chain Performance — chain-verified amino formulas for performance, recovery, and skincare. Join the waitlist for the Vibrant Heat Series.">
+<meta name="description" content="Amino Chain Performance — chain-verified amino formulas for performance, recovery, and skincare.">
 <style>
   :root{
     --ink:#140F0B;
@@ -166,27 +166,6 @@
     color:var(--bone-dim);margin:22px 0 36px;
   }
   .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-
-  /* ---------- email form ---------- */
-  .signup-form{
-    display:flex;flex-direction:column;gap:10px;
-    max-width:440px;margin:0 auto;
-  }
-  @media (min-width:520px){ .signup-form{flex-direction:row;} }
-  .signup-form input[type="email"]{
-    flex:1;min-width:0;
-    background:var(--surface);
-    border:1px solid var(--line);
-    color:var(--bone);
-    font-family:inherit;font-size:.95rem;
-    padding:.95em 1.1em;border-radius:3px;
-  }
-  .signup-form input[type="email"]::placeholder{color:var(--bone-dim);}
-  .signup-form input[type="email"]:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold);}
-  .form-status{margin-top:12px;font-size:.86rem;font-weight:600;min-height:1.2em;}
-  .form-status[data-state="success"]{color:var(--success);}
-  .form-status[data-state="error"]{color:var(--danger);}
-  .form-note{margin-top:10px;font-size:.78rem;color:var(--bone-dim);}
 
   /* ---------- section shells ---------- */
   section{padding-block:76px;}
@@ -513,15 +492,6 @@
   .faq-item.open .faq-a{padding-bottom:24px;}
   .faq-a-inner{max-width:62ch;}
 
-  /* ---------- waitlist CTA band ---------- */
-  .waitlist-band{
-    text-align:center;
-    background:linear-gradient(180deg,var(--ink) 0%,var(--rust) 160%);
-    border-top:1px solid var(--line);
-  }
-  .waitlist-band h2{font-size:clamp(2.2rem,5.2vw + 1rem,3.6rem);margin-bottom:20px;}
-  .waitlist-band > .wrap > p{color:var(--bone-dim);margin-bottom:34px;max-width:52ch;margin-inline:auto;}
-
   /* ---------- footer ---------- */
   footer{padding-block:56px 40px;border-top:1px solid var(--line);}
   .footer-grid{
@@ -608,7 +578,7 @@
       <a href="#catalog">Catalog</a>
       <a href="#faq">FAQ</a>
     </div>
-    <a href="#waitlist" class="btn btn-primary btn-sm">Join Waitlist</a>
+    <a href="#catalog" class="btn btn-primary btn-sm">See Products</a>
   </nav>
 </header>
 
@@ -621,8 +591,7 @@
       <h1>Amino Chain<span class="accent">Performance</span></h1>
       <div class="hero-sub">Rebuild &nbsp;&middot;&nbsp; Restore &nbsp;&middot;&nbsp; Outperform</div>
       <div class="hero-actions">
-        <a href="#waitlist" class="btn btn-primary">Join the Waitlist</a>
-        <a href="#catalog" class="btn btn-secondary">See the Products (Peppers)</a>
+        <a href="#catalog" class="btn btn-primary">See the Products (Peppers)</a>
       </div>
     </div>
   </section>
@@ -737,7 +706,7 @@
     <div class="wrap">
       <div class="section-head">
         <h2>Real feedback, coming soon.</h2>
-        <p>We'll feature genuine tester quotes here once Vibrant Heat ships to the waitlist. The cards below are placeholders &mdash; swap them for real testimonials when you have them.</p>
+        <p>We'll feature genuine tester quotes here once Vibrant Heat ships. The cards below are placeholders &mdash; swap them for real testimonials when you have them.</p>
       </div>
       <div class="results-grid">
         <div class="result-card">
@@ -778,25 +747,12 @@
         </div>
         <div class="faq-item">
           <div class="faq-q"><span>When does the Vibrant Heat Series launch?</span><span class="icon">+</span></div>
-          <div class="faq-a"><div class="faq-a-inner">We're finalizing formulation and testing now. Join the waitlist and you'll be first to know the date, plus get early access pricing.</div></div>
+          <div class="faq-a"><div class="faq-a-inner">We're finalizing formulation and testing now &mdash; check back here for updates as products come online.</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="waitlist-band" id="waitlist">
-    <div class="wrap">
-      <h2>Break the chain.<br>Rebuild stronger.</h2>
-      <p>Join the waitlist and be first in line when Vibrant Heat launches &mdash; plus early access pricing on release day.</p>
-      <form class="signup-form" id="waitlist-form" data-source="waitlist-band" novalidate>
-        <label for="waitlist-email" class="visually-hidden">Email address</label>
-        <input id="waitlist-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
-        <button class="btn btn-primary" type="submit" id="waitlist-submit">Join the Waitlist</button>
-      </form>
-      <p class="form-status" id="waitlist-status" role="status" aria-live="polite"></p>
-      <p class="form-note">One launch email. No spam, no trades. Unsubscribe anytime.</p>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -813,7 +769,6 @@
       </div>
       <div class="footer-col">
         <h4>Company</h4>
-        <a href="#waitlist">Waitlist</a>
         <a href="mailto:aminochain2026@gmail.com" target="_top">Contact</a>
       </div>
       <div class="footer-col">
@@ -873,28 +828,6 @@
       }
     });
   });
-
-  /* ---------- waitlist form (mailto — no server backend on static hosting) ---------- */
-  var waitlistForm = document.getElementById("waitlist-form");
-  if(waitlistForm){
-    waitlistForm.addEventListener("submit", function(e){
-      e.preventDefault();
-      var input = document.getElementById("waitlist-email");
-      var status = document.getElementById("waitlist-status");
-      var email = (input.value || "").trim();
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-        status.dataset.state = "error";
-        status.textContent = "That doesn't look like a valid email — give it another try.";
-        input.focus();
-        return;
-      }
-      var subject = "Waitlist signup";
-      var body = "Please add me to the Amino Chain Performance waitlist.\n\nMy email: " + email;
-      window.location.href = buildMailto(subject, body);
-      status.dataset.state = "success";
-      status.textContent = "Almost there — send the email that just opened and you're on the list.";
-    });
-  }
 
   /* ---------- catalog data (fallback only — real data comes from /api/get-products) ---------- */
   var DEFAULT_PRODUCTS = [
