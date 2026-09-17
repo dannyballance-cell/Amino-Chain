@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amino Chain Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<meta name="description" content="Amino Chain Performance — chain-verified amino formulas for performance, recovery, and skincare. Join the waitlist for the Vibrant Heat Series.">
+<style>
+  :root{
+    --ink:#140F0B;
+    --ink-2:#1D1611;
+    --surface:#1A130E;
+    --ember:#E8420C;
+    --molten:#FF8A3D;
+    --gold:#D4A24C;
+    --gold-dim:#8C6E38;
+    --bone:#F3ECDE;
+    --bone-dim:#B8AC97;
+    --rust:#5A2210;
+    --line: rgba(243,236,222,0.12);
+    --line-bright: rgba(212,162,76,0.45);
+    --success:#8FD694;
+    --danger:#FF9B7A;
+    --font-display:'Big Shoulders Display', Impact, 'Arial Narrow Bold', sans-serif;
+    --font-body:'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono:'Space Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--font-body);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  p{margin:0;}
+  ul{margin:0;padding:0;}
+  button{font-family:inherit;}
+
+  h1,h2,h3,.display{
+    font-family:var(--font-display);
+    font-weight:800;
+    letter-spacing:.01em;
+    line-height:.98;
+    text-transform:uppercase;
+    text-wrap:balance;
+    margin:0;
+  }
+  .mono{font-family:var(--font-mono);}
+
+  .wrap{max-width:1180px;margin:0 auto;padding-inline:20px;}
+  @media (min-width:760px){ .wrap{padding-inline:40px;} }
+
+  .molgrid{
+    background-image:radial-gradient(circle at 1px 1px, rgba(212,162,76,0.32) 1px, transparent 1.4px);
+    background-size:32px 32px;
+  }
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    border:1px solid var(--gold-dim);
+    color:var(--gold);
+    padding:.4em 1em;border-radius:20px;
+    font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  }
+
+  .btn{
+    appearance:none;border:none;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+    border-radius:3px;font-weight:700;letter-spacing:.03em;
+    font-size:.92rem;padding:.95em 1.7em;
+  }
+  .btn:focus-visible{outline:2px solid var(--gold-bright, var(--gold));outline-offset:2px;}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--molten),var(--ember));
+    color:var(--ink);
+    box-shadow:0 10px 30px rgba(232,66,12,0.3);
+    transition:transform .18s ease, filter .18s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);filter:brightness(1.05);}
+  .btn-secondary{
+    border:1px solid var(--line);
+    color:var(--bone);
+    background:transparent;
+    transition:border-color .18s ease,color .18s ease;
+  }
+  .btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+  .btn[disabled]{opacity:.65;cursor:default;transform:none;}
+  .btn-sm{padding:.65em 1.2em;font-size:.8rem;}
+
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;}
+
+  /* ---------- header ---------- */
+  header.site-header{
+    position:sticky;
+    top:env(safe-area-inset-top,0px);
+    z-index:50;
+    background:rgba(20,15,11,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.topnav{
+    display:flex;align-items:center;justify-content:space-between;
+    max-width:1180px;margin:0 auto;padding:14px 20px;gap:16px;
+  }
+  @media (min-width:760px){ nav.topnav{padding:16px 40px;} }
+  .brand-mark{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--font-display);font-weight:800;
+    font-size:1.15rem;letter-spacing:.03em;text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .brand-mark .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--ember);
+    box-shadow:0 0 12px 2px rgba(232,66,12,0.6);
+    flex:none;
+  }
+  .nav-links{display:none;gap:30px;font-size:.9rem;font-weight:600;}
+  .nav-links a{color:var(--bone-dim);transition:color .15s ease;}
+  .nav-links a:hover,.nav-links a:focus-visible{color:var(--bone);}
+  @media (min-width:860px){ .nav-links{display:flex;} }
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;padding-block:60px 64px;isolation:isolate;}
+  @media (min-width:760px){ .hero{padding-block:88px 90px;} }
+  .hero-image{
+    position:absolute;inset:0;z-index:-3;
+    background-image:
+      linear-gradient(180deg, rgba(20,15,11,0.5) 0%, rgba(20,15,11,0.72) 60%, rgba(20,15,11,0.95) 100%),
+      url('assets/hero-brand.jpg');
+    background-size:cover;
+    background-position:center 35%;
+  }
+  .hero-glow{
+    position:absolute;inset:-15% -10%;z-index:-2;
+    background:
+      radial-gradient(ellipse 55% 45% at 50% 65%, rgba(232,66,12,0.25), transparent 62%),
+      radial-gradient(ellipse 35% 28% at 50% 70%, rgba(255,138,61,0.22), transparent 65%);
+  }
+  @media (prefers-reduced-motion:no-preference){ .hero-glow{animation:pulse 7s ease-in-out infinite;} }
+  @keyframes pulse{0%,100%{opacity:.85;}50%{opacity:1;}}
+  .hero-content{position:relative;z-index:1;max-width:900px;margin:0 auto;text-align:center;}
+  .hero-content .eyebrow{margin-bottom:24px;}
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw + 1rem, 5.6rem);
+    color:var(--bone);
+  }
+  .hero h1 .accent{
+    display:block;
+    background:linear-gradient(180deg,var(--gold) 10%,var(--molten) 55%,var(--ember) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero-sub{
+    font-family:var(--font-display);font-weight:700;
+    font-size:clamp(1rem,2vw + .5rem,1.35rem);
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--bone-dim);margin:22px 0 36px;
+  }
+  .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* ---------- email form ---------- */
+  .signup-form{
+    display:flex;flex-direction:column;gap:10px;
+    max-width:440px;margin:0 auto;
+  }
+  @media (min-width:520px){ .signup-form{flex-direction:row;} }
+  .signup-form input[type="email"]{
+    flex:1;min-width:0;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-family:inherit;font-size:.95rem;
+    padding:.95em 1.1em;border-radius:3px;
+  }
+  .signup-form input[type="email"]::placeholder{color:var(--bone-dim);}
+  .signup-form input[type="email"]:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold);}
+  .form-status{margin-top:12px;font-size:.86rem;font-weight:600;min-height:1.2em;}
+  .form-status[data-state="success"]{color:var(--success);}
+  .form-status[data-state="error"]{color:var(--danger);}
+  .form-note{margin-top:10px;font-size:.78rem;color:var(--bone-dim);}
+
+  /* ---------- section shells ---------- */
+  section{padding-block:76px;}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;margin-bottom:48px;flex-wrap:wrap;
+  }
+  .section-head h2{font-size:clamp(2rem,3.6vw + 1rem,3rem);max-width:15ch;}
+  .section-head p{color:var(--bone-dim);max-width:42ch;font-size:.98rem;}
+  .section-head.center{justify-content:center;text-align:center;flex-direction:column;align-items:center;}
+
+  /* ---------- pillars ---------- */
+  .pillars{border-top:1px solid var(--line);}
+  .pillars-banner{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    border-radius:12px;
+    border:1px solid var(--line-bright);
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    margin-bottom:40px;
+  }
+  .pillars-grid{
+    display:grid;grid-template-columns:1fr;gap:1px;
+    background:var(--line);border:1px solid var(--line);
+  }
+  @media (min-width:760px){ .pillars-grid{grid-template-columns:repeat(3,1fr);} }
+  .pillar{background:var(--ink);padding:38px 32px;transition:background .2s ease;}
+  .pillar:hover{background:var(--ink-2);}
+  .pillar-icon{width:42px;height:42px;margin-bottom:20px;}
+  .pillar h3{font-size:1.55rem;margin-bottom:12px;}
+  .pillar.p-rebuild h3{color:var(--molten);}
+  .pillar.p-restore h3{color:var(--gold);}
+  .pillar.p-outperform h3{color:#E8C567;}
+  .pillar p{color:var(--bone-dim);font-size:.94rem;max-width:38ch;}
+
+  /* ---------- catalog ---------- */
+  .catalog-single-heading{
+    font-size:1.3rem;letter-spacing:.03em;margin-bottom:24px;color:var(--molten);
+  }
+  .catalog-groups{display:grid;grid-template-columns:1fr;gap:44px 60px;}
+  @media (min-width:860px){ .catalog-groups{grid-template-columns:1fr 1fr;} }
+  .catalog-group .group-count{
+    font-family:var(--font-mono);font-size:.76rem;color:var(--bone-dim);
+    display:block;margin-bottom:16px;
+  }
+  .catalog-group .group-count[hidden]{display:none;}
+  .catalog-list{border-top:1px solid var(--line);}
+  .catalog-row{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:16px;flex-wrap:wrap;
+    padding:14px 0;border-bottom:1px solid var(--line);
+  }
+  .catalog-thumb{
+    width:44px;height:44px;flex:none;
+    border-radius:8px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--bone-dim);
+  }
+  .catalog-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .catalog-thumb svg{width:20px;height:20px;}
+  .thumb-edit-btn{
+    position:absolute;inset:0;
+    display:none;align-items:center;justify-content:center;
+    background:rgba(20,15,11,0.6);
+    border:none;cursor:pointer;color:var(--bone);
+    opacity:0;transition:opacity .15s ease;
+    padding:0;
+  }
+  .catalog-thumb.has-editor .thumb-edit-btn{display:flex;}
+  .catalog-thumb.has-editor:hover .thumb-edit-btn,
+  .catalog-thumb.has-editor .thumb-edit-btn:focus-visible{opacity:1;}
+  .thumb-edit-btn svg{width:16px;height:16px;}
+  .catalog-row .name-wrap{display:flex;flex-direction:column;gap:3px;flex:1;min-width:170px;}
+  .catalog-row .name{font-weight:700;font-size:.96rem;}
+  .catalog-row .benefit{font-size:.82rem;color:var(--bone-dim);max-width:42ch;}
+  .catalog-row .meta{display:flex;align-items:center;gap:10px;flex:none;}
+  .catalog-row .dose{font-family:var(--font-mono);font-size:.78rem;color:var(--gold);white-space:nowrap;}
+  .catalog-admin-hint{
+    font-size:.82rem;color:var(--gold-dim);
+    margin:-24px 0 32px;
+    padding:10px 14px;
+    border:1px dashed var(--line-bright);
+    border-radius:4px;
+    max-width:70ch;
+  }
+  .catalog-row[draggable="true"]{cursor:grab;}
+  .catalog-row.dragging{opacity:.4;}
+  .catalog-list.drag-over{background:rgba(212,162,76,0.06);border-radius:4px;}
+  .catalog-thumb.file-drag-over{outline:2px solid var(--gold);outline-offset:1px;}
+  .catalog-admin-hint[hidden],
+  .trash-zone[hidden],
+  .removed-panel[hidden],
+  .removed-list[hidden],
+  .order-requests-panel[hidden],
+  .order-requests-empty[hidden]{display:none;}
+  .order-requests-panel{
+    margin:-8px 0 32px;
+    padding:18px 20px;
+    border:1px solid var(--line-bright);
+    border-radius:8px;
+    background:var(--surface);
+  }
+  .order-requests-head{
+    display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;
+    margin-bottom:4px;
+  }
+  .order-requests-head h3{font-size:1.02rem;color:var(--gold);}
+  .order-requests-head h3 .count{color:var(--bone-dim);font-weight:400;}
+  .order-requests-panel .admin-hint{font-size:.8rem;color:var(--bone-dim);max-width:60ch;}
+  .order-requests-list{
+    margin-top:14px;display:flex;flex-direction:column;gap:2px;
+    border-top:1px solid var(--line);
+  }
+  .order-request-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 0;border-bottom:1px solid var(--line);
+    font-size:.88rem;
+  }
+  .order-request-info{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .order-request-name{font-weight:700;color:var(--bone);}
+  .order-request-meta{font-size:.76rem;color:var(--bone-dim);font-family:var(--font-mono);}
+  .order-request-dismiss{
+    appearance:none;border:1px solid var(--line-bright);background:none;flex:none;
+    color:var(--bone-dim);font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+    padding:.4em .8em;border-radius:20px;cursor:pointer;white-space:nowrap;
+  }
+  .order-request-dismiss:hover{border-color:var(--gold);color:var(--gold);}
+  .order-requests-empty{
+    margin-top:14px;font-size:.86rem;color:var(--bone-dim);
+  }
+  .trash-zone{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    margin-top:32px;padding:16px;
+    border:1px dashed var(--line-bright);border-radius:6px;
+    color:var(--bone-dim);font-size:.86rem;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .trash-zone svg{width:18px;height:18px;flex:none;}
+  .trash-zone.drag-over{border-color:var(--danger);color:var(--danger);background:rgba(255,155,122,0.08);}
+  .removed-panel{margin-top:28px;}
+  .removed-toggle{
+    appearance:none;border:none;background:none;cursor:pointer;
+    color:var(--bone-dim);font-size:.84rem;font-weight:700;
+    padding:0;
+  }
+  .removed-toggle:hover{color:var(--bone);}
+  .removed-list{
+    margin-top:14px;display:flex;flex-direction:column;gap:2px;
+    border-top:1px solid var(--line);
+  }
+  .removed-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px 0;border-bottom:1px solid var(--line);
+    font-size:.88rem;color:var(--bone-dim);
+  }
+  .restore-btn{
+    appearance:none;border:1px solid var(--line-bright);background:none;
+    color:var(--gold);font-size:.76rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+    padding:.4em .9em;border-radius:20px;cursor:pointer;
+  }
+  .restore-btn:hover{border-color:var(--gold);}
+  .status-pill{
+    font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    padding:.3em .7em;border-radius:20px;border:1px solid var(--line-bright);
+    color:var(--bone-dim);white-space:nowrap;
+  }
+  .status-pill[data-status="in-stock"]{color:var(--success);border-color:rgba(143,214,148,0.5);}
+  .status-pill[data-status="low-stock"]{color:var(--molten);border-color:rgba(255,138,61,0.5);}
+  .status-pill[data-status="out-of-stock"]{color:var(--danger);border-color:rgba(255,155,122,0.5);text-decoration:line-through;}
+  .status-pill.editable{cursor:pointer;}
+  .status-pill.editable:hover{border-color:var(--gold);}
+  .status-pill.editable:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .order-btn{
+    font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    padding:.4em .85em;border-radius:20px;white-space:nowrap;
+    background:linear-gradient(135deg,var(--molten),var(--ember));
+    color:var(--ink);
+  }
+  .order-btn:hover{filter:brightness(1.06);}
+  .order-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+  /* ---------- certificates of analysis ---------- */
+  .coa-add-form{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+    margin-bottom:8px;
+  }
+  .coa-add-form input[type="text"]{
+    flex:1;min-width:220px;
+    background:var(--surface);border:1px solid var(--line);color:var(--bone);
+    font-family:inherit;font-size:.92rem;padding:.85em 1em;border-radius:6px;
+  }
+  .coa-add-form input[type="text"]::placeholder{color:var(--bone-dim);}
+  .coa-add-form input[type="text"]:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold);}
+  .coa-add-form input[type="file"]{
+    color:var(--bone-dim);font-size:.85rem;max-width:220px;
+  }
+  .coa-list{
+    display:grid;grid-template-columns:1fr;gap:14px;margin-top:28px;
+  }
+  @media (min-width:720px){ .coa-list{grid-template-columns:1fr 1fr;} }
+  .coa-card{
+    display:flex;align-items:center;gap:14px;
+    border:1px solid var(--line);border-radius:8px;
+    padding:16px 18px;
+    background:var(--surface);
+  }
+  .coa-card .coa-icon{
+    width:40px;height:40px;flex:none;border-radius:6px;
+    background:rgba(212,162,76,0.1);border:1px solid var(--line-bright);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);
+    overflow:hidden;
+  }
+  .coa-card .coa-icon img{width:100%;height:100%;object-fit:cover;}
+  .coa-card .coa-icon svg{width:20px;height:20px;}
+  .coa-card .coa-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .coa-card .coa-label{font-weight:700;font-size:.94rem;}
+  .coa-card .coa-meta{font-size:.78rem;color:var(--bone-dim);font-family:var(--font-mono);}
+  .coa-card .coa-actions{display:flex;align-items:center;gap:10px;flex:none;}
+  .coa-view-link{
+    font-size:.78rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+    color:var(--gold);white-space:nowrap;
+  }
+  .coa-view-link:hover{color:var(--gold-bright,var(--gold));}
+  .coa-remove-btn{
+    appearance:none;border:1px solid var(--line-bright);background:none;
+    color:var(--bone-dim);font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+    padding:.4em .8em;border-radius:20px;cursor:pointer;white-space:nowrap;
+  }
+  .coa-remove-btn:hover{border-color:var(--danger);color:var(--danger);}
+  .coa-empty{
+    margin-top:28px;font-size:.9rem;color:var(--bone-dim);
+    border:1px dashed var(--line-bright);border-radius:6px;
+    padding:24px;text-align:center;
+  }
+  .coa-empty[hidden]{display:none;}
+  .coa-add-form[hidden]{display:none;}
+
+  /* ---------- science ---------- */
+  .science{background:var(--ink-2);border-block:1px solid var(--line);}
+  .science-grid{display:grid;grid-template-columns:1fr;gap:44px;align-items:center;}
+  @media (min-width:900px){ .science-grid{grid-template-columns:1fr 1fr;} }
+  .science h2{font-size:clamp(1.9rem,3.4vw + 1rem,2.6rem);margin-bottom:18px;}
+  .science p.lead{color:var(--bone-dim);margin-bottom:30px;max-width:44ch;}
+  .spec-list{display:flex;flex-direction:column;border-top:1px solid var(--line);}
+  .spec-row{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:16px 0;border-bottom:1px solid var(--line);font-size:.9rem;
+  }
+  .spec-row span:first-child{color:var(--bone-dim);}
+  .spec-row span:last-child{font-family:var(--font-mono);color:var(--gold);text-align:right;}
+  .coa-panel{
+    border:1px dashed var(--line-bright);
+    border-radius:4px;
+    padding:28px;
+    background:var(--surface);
+  }
+  .coa-panel .mono-label{font-family:var(--font-mono);font-size:.72rem;color:var(--bone-dim);letter-spacing:.04em;}
+  .coa-panel .mono-value{font-family:var(--font-mono);font-size:1.35rem;color:var(--molten);margin:8px 0 20px;}
+  .coa-fill-track{height:6px;background:rgba(243,236,222,0.08);border-radius:4px;overflow:hidden;}
+  .coa-fill{height:100%;width:0%;background:repeating-linear-gradient(135deg,var(--gold) 0 8px,var(--gold-dim) 8px 16px);}
+  .coa-preview-tag{
+    display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink);background:var(--gold);padding:.3em .7em;border-radius:3px;margin-bottom:16px;
+  }
+  .coa-foot{margin-top:22px;font-size:.82rem;color:var(--bone-dim);}
+
+  /* ---------- results (placeholder testimonials) ---------- */
+  .results-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+  @media (min-width:760px){ .results-grid{grid-template-columns:repeat(3,1fr);} }
+  .result-card{
+    border:1px dashed var(--line-bright);
+    border-radius:4px;padding:28px;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .result-card .quote-mark{font-family:var(--font-display);font-size:2.2rem;color:var(--gold-dim);line-height:1;}
+  .result-card p{color:var(--bone-dim);font-style:italic;font-size:.98rem;}
+  .result-name{font-weight:700;font-size:.86rem;color:var(--bone-dim);}
+  .placeholder-flag{
+    font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--gold-dim);
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{max-width:780px;margin:0 auto;}
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-q{
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+    padding:24px 4px;cursor:pointer;
+    font-family:var(--font-display);font-weight:700;font-size:1.08rem;
+    text-transform:none;
+  }
+  .faq-q .icon{font-size:1.3rem;color:var(--gold);flex:none;transition:transform .2s ease;}
+  .faq-item.open .faq-q .icon{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;color:var(--bone-dim);font-size:.94rem;}
+  .faq-item.open .faq-a{padding-bottom:24px;}
+  .faq-a-inner{max-width:62ch;}
+
+  /* ---------- waitlist CTA band ---------- */
+  .waitlist-band{
+    text-align:center;
+    background:linear-gradient(180deg,var(--ink) 0%,var(--rust) 160%);
+    border-top:1px solid var(--line);
+  }
+  .waitlist-band h2{font-size:clamp(2.2rem,5.2vw + 1rem,3.6rem);margin-bottom:20px;}
+  .waitlist-band > .wrap > p{color:var(--bone-dim);margin-bottom:34px;max-width:52ch;margin-inline:auto;}
+
+  /* ---------- footer ---------- */
+  footer{padding-block:56px 40px;border-top:1px solid var(--line);}
+  .footer-grid{
+    display:grid;grid-template-columns:1fr;gap:36px;margin-bottom:44px;
+  }
+  @media (min-width:640px){ .footer-grid{grid-template-columns:1.3fr 1fr 1fr;} }
+  @media (min-width:900px){ .footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;} }
+  .footer-brand p{color:var(--bone-dim);font-size:.88rem;max-width:32ch;margin-top:14px;}
+  .footer-brand .brand-mark{margin-bottom:0;}
+  .footer-col h4{
+    font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--bone-dim);margin-bottom:14px;font-weight:700;font-family:var(--font-body);
+  }
+  .footer-col a{display:block;font-size:.9rem;margin-bottom:9px;color:var(--bone);opacity:.85;}
+  .footer-col a:hover{opacity:1;color:var(--molten);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    padding-top:24px;border-top:1px solid var(--line);
+    font-size:.8rem;color:var(--bone-dim);
+  }
+  .disclaimer{
+    font-size:.76rem;color:var(--bone-dim);opacity:.75;
+    max-width:900px;margin:24px auto 0;text-align:center;line-height:1.7;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+  }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <nav class="topnav">
+    <a class="brand-mark" href="#top"><span class="dot"></span>AMINO CHAIN</a>
+    <div class="nav-links">
+      <a href="#catalog">Catalog</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#waitlist" class="btn btn-primary btn-sm">Join Waitlist</a>
+  </nav>
+</header>
+
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-image" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-content">
+      <h1>Amino Chain<span class="accent">Performance</span></h1>
+      <div class="hero-sub">Rebuild &nbsp;&middot;&nbsp; Restore &nbsp;&middot;&nbsp; Outperform</div>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn btn-primary">Join the Waitlist</a>
+        <a href="#catalog" class="btn btn-secondary">See the Products (Peppers)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars">
+    <div class="wrap">
+      <img class="pillars-banner" src="assets/pillars-strip.jpg" alt="Rebuild, Restore, Outperform &mdash; the three pillars of Amino Chain Performance, shown with their amino chain, cellular, and energy icons.">
+      <div class="pillars-grid">
+        <div class="pillar p-rebuild">
+          <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="#FF8A3D" stroke-width="2.5" stroke-linecap="round">
+            <path d="M6 24h4M38 24h4M12 24h6M30 24h6M18 24h12"/>
+            <rect x="8" y="18" width="4" height="12" rx="1"/>
+            <rect x="36" y="18" width="4" height="12" rx="1"/>
+            <rect x="14" y="20" width="4" height="8" rx="1"/>
+            <rect x="30" y="20" width="4" height="8" rx="1"/>
+          </svg>
+          <h3>Rebuild</h3>
+          <p>Amino acid formulas built to support muscle repair after the sessions that actually break you down.</p>
+        </div>
+        <div class="pillar p-restore">
+          <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="#D4A24C" stroke-width="2.5" stroke-linecap="round">
+            <circle cx="24" cy="24" r="16"/>
+            <circle cx="24" cy="24" r="3" fill="#D4A24C" stroke="none"/>
+            <path d="M24 8v6M24 34v6M8 24h6M34 24h6"/>
+          </svg>
+          <h3>Restore</h3>
+          <p>Recovery support aimed at the cellular level, replenishing what a hard training block quietly drains.</p>
+        </div>
+        <div class="pillar p-outperform">
+          <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="#E8C567" stroke-width="2.5" stroke-linejoin="round">
+            <path d="M26 4 10 28h10l-4 16 18-24H24l2-16z" fill="rgba(232,197,103,0.08)"/>
+          </svg>
+          <h3>Outperform</h3>
+          <p>Engineered so recovery stops being the bottleneck between today's session and tomorrow's best.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="catalog" id="catalog">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>What we're launching with.</h2>
+        <p>Every active going into the Performance, Recovery &amp; Restore, and Skincare lines, organized by category. Doses shown are standard starting formulations &mdash; final label values are confirmed during testing.</p>
+      </div>
+
+      <h3 class="catalog-single-heading">Products (Peppers)</h3>
+      <div class="catalog-groups" id="catalog-groups">
+        <div class="catalog-group vitamins">
+          <div class="catalog-list" data-category="vitamins"></div>
+        </div>
+
+        <div class="catalog-group minerals">
+          <div class="catalog-list" data-category="minerals"></div>
+        </div>
+
+        <div class="catalog-group performance-aminos">
+          <div class="catalog-list" data-category="performance-aminos"></div>
+        </div>
+
+        <div class="catalog-group botanicals">
+          <div class="catalog-list" data-category="botanicals"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="coas molgrid" id="coas">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Lab Results</div>
+          <h2 style="margin-top:10px;">Certificates of Analysis</h2>
+        </div>
+        <p>Independent third-party testing for every lot, published here as soon as it's available.</p>
+      </div>
+
+      <div class="coa-list" id="coa-list"></div>
+      <p class="coa-empty" id="coa-empty">No certificates published yet &mdash; check back once testing is complete.</p>
+    </div>
+  </section>
+
+  <section class="results" id="results">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Real feedback, coming soon.</h2>
+        <p>We'll feature genuine tester quotes here once Vibrant Heat ships to the waitlist. The cards below are placeholders &mdash; swap them for real testimonials when you have them.</p>
+      </div>
+      <div class="results-grid">
+        <div class="result-card">
+          <span class="placeholder-flag">Placeholder</span>
+          <div class="quote-mark">&ldquo;</div>
+          <p>Add a real customer quote here once early testers have tried the product.</p>
+          <div class="result-name">[Name], [Role]</div>
+        </div>
+        <div class="result-card">
+          <span class="placeholder-flag">Placeholder</span>
+          <div class="quote-mark">&ldquo;</div>
+          <p>Add a real customer quote here once early testers have tried the product.</p>
+          <div class="result-name">[Name], [Role]</div>
+        </div>
+        <div class="result-card">
+          <span class="placeholder-flag">Placeholder</span>
+          <div class="quote-mark">&ldquo;</div>
+          <p>Add a real customer quote here once early testers have tried the product.</p>
+          <div class="result-name">[Name], [Role]</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="section-head center">
+        <h2>Questions, answered</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q"><span>What makes the Vibrant Heat Series different?</span><span class="icon">+</span></div>
+          <div class="faq-a"><div class="faq-a-inner">Every formula is built around complete amino acid chains and a heat-activated delivery system, with full-transparency labels and no proprietary blends across Performance, Recovery &amp; Restore, and Skincare.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>Will you publish lab results?</span><span class="icon">+</span></div>
+          <div class="faq-a"><div class="faq-a-inner">Yes &mdash; every lot, across every line, will ship with a public certificate of analysis from an independent third-party lab.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>When does the Vibrant Heat Series launch?</span><span class="icon">+</span></div>
+          <div class="faq-a"><div class="faq-a-inner">We're finalizing formulation and testing now. Join the waitlist and you'll be first to know the date, plus get early access pricing.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="waitlist-band" id="waitlist">
+    <div class="wrap">
+      <h2>Break the chain.<br>Rebuild stronger.</h2>
+      <p>Join the waitlist and be first in line when Vibrant Heat launches &mdash; plus early access pricing on release day.</p>
+      <form class="signup-form" id="waitlist-form" data-source="waitlist-band" novalidate>
+        <label for="waitlist-email" class="visually-hidden">Email address</label>
+        <input id="waitlist-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+        <button class="btn btn-primary" type="submit" id="waitlist-submit">Join the Waitlist</button>
+      </form>
+      <p class="form-status" id="waitlist-status" role="status" aria-live="polite"></p>
+      <p class="form-note">One launch email. No spam, no trades. Unsubscribe anytime.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-mark"><span class="dot"></span>AMINO CHAIN</div>
+        <p>Rebuild. Restore. Outperform. Chain-verified amino formulas for performance, recovery, and skincare.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="#catalog">Catalog</a>
+        <a href="#coas">Certificates of Analysis</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#waitlist">Waitlist</a>
+        <a href="mailto:aminochain2026@gmail.com" target="_top">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Amino Chain Performance. All rights reserved.</span>
+      <span>Vibrant Heat Series</span>
+    </div>
+    <p class="disclaimer">These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var ORDER_EMAIL = "aminochain2026@gmail.com";
+
+  function buildMailto(subject, body){
+    return "mailto:" + ORDER_EMAIL +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+  }
+
+  /* ---------- FAQ accordion ---------- */
+  document.querySelectorAll(".faq-item").forEach(function(item){
+    var q = item.querySelector(".faq-q");
+    var a = item.querySelector(".faq-a");
+    q.addEventListener("click", function(){
+      var isOpen = item.classList.contains("open");
+      document.querySelectorAll(".faq-item.open").forEach(function(o){
+        if(o !== item){ o.classList.remove("open"); o.querySelector(".faq-a").style.maxHeight = null; }
+      });
+      if(isOpen){
+        item.classList.remove("open");
+        a.style.maxHeight = null;
+      }else{
+        item.classList.add("open");
+        a.style.maxHeight = a.scrollHeight + "px";
+      }
+    });
+  });
+
+  /* ---------- waitlist form (mailto — no server backend on static hosting) ---------- */
+  var waitlistForm = document.getElementById("waitlist-form");
+  if(waitlistForm){
+    waitlistForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var input = document.getElementById("waitlist-email");
+      var status = document.getElementById("waitlist-status");
+      var email = (input.value || "").trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        status.dataset.state = "error";
+        status.textContent = "That doesn't look like a valid email — give it another try.";
+        input.focus();
+        return;
+      }
+      var subject = "Waitlist signup";
+      var body = "Please add me to the Amino Chain Performance waitlist.\n\nMy email: " + email;
+      window.location.href = buildMailto(subject, body);
+      status.dataset.state = "success";
+      status.textContent = "Almost there — send the email that just opened and you're on the list.";
+    });
+  }
+
+  /* ---------- catalog data ---------- */
+  var PRODUCTS = [
+    { slug:"vitamin-d3", name:"Vitamin D3", benefit:"Supports bone health, immune function, and calcium absorption.", dose:"2000 IU · softgel", category:"vitamins" },
+    { slug:"vitamin-c", name:"Vitamin C", benefit:"An antioxidant that supports immune function and collagen production.", dose:"500 mg · capsule", category:"vitamins" },
+    { slug:"vitamin-b12", name:"Vitamin B12", benefit:"Supports energy metabolism and nervous system function.", dose:"1000 mcg · capsule", category:"vitamins" },
+    { slug:"vitamin-b6", name:"Vitamin B6", benefit:"Supports protein metabolism and red blood cell formation.", dose:"25 mg · capsule", category:"vitamins" },
+    { slug:"folate-b9", name:"Folate (B9)", benefit:"Supports cell division and red blood cell formation.", dose:"400 mcg DFE · capsule", category:"vitamins" },
+    { slug:"vitamin-e", name:"Vitamin E", benefit:"An antioxidant that helps protect cells from oxidative stress.", dose:"268 mg · softgel", category:"vitamins" },
+    { slug:"vitamin-k2", name:"Vitamin K2", benefit:"Supports calcium regulation and bone health, pairs with D3.", dose:"100 mcg · capsule", category:"vitamins" },
+    { slug:"magnesium", name:"Magnesium", benefit:"Supports muscle function, energy production, and healthy sleep.", dose:"200 mg · capsule", category:"minerals" },
+    { slug:"zinc", name:"Zinc", benefit:"Supports immune function and protein synthesis.", dose:"15 mg · capsule", category:"minerals" },
+    { slug:"calcium", name:"Calcium", benefit:"Supports bone density and muscle contraction.", dose:"500 mg · capsule", category:"minerals" },
+    { slug:"iron", name:"Iron", benefit:"Supports oxygen transport and red blood cell production.", dose:"18 mg · capsule", category:"minerals" },
+    { slug:"selenium", name:"Selenium", benefit:"An antioxidant mineral that supports thyroid function.", dose:"55 mcg · capsule", category:"minerals" },
+    { slug:"iodine", name:"Iodine", benefit:"Supports healthy thyroid hormone production.", dose:"150 mcg · capsule", category:"minerals" },
+    { slug:"creatine-monohydrate", name:"Creatine Monohydrate", benefit:"Supports strength, power output, and training recovery.", dose:"5 g · powder", category:"performance-aminos" },
+    { slug:"coenzyme-q10", name:"Coenzyme Q10", benefit:"Supports cellular energy production and heart health.", dose:"100 mg · softgel", category:"performance-aminos" },
+    { slug:"l-carnitine", name:"L-Carnitine", benefit:"Supports fatty acid metabolism and exercise recovery.", dose:"1000 mg · capsule", category:"performance-aminos" },
+    { slug:"l-glutamine", name:"L-Glutamine", benefit:"Supports muscle recovery and gut lining integrity.", dose:"5 g · powder", category:"performance-aminos" },
+    { slug:"l-arginine", name:"L-Arginine", benefit:"Supports healthy blood flow and nitric oxide production.", dose:"1000 mg · capsule", category:"performance-aminos" },
+    { slug:"glycine", name:"Glycine", benefit:"Supports collagen synthesis and restful sleep.", dose:"3 g · powder", category:"performance-aminos" },
+    { slug:"nac", name:"N-Acetyl-L-Cysteine", benefit:"Supports glutathione production and antioxidant defense.", dose:"600 mg · capsule", category:"performance-aminos" },
+    { slug:"omega-3-fish-oil", name:"Omega-3 Fish Oil", benefit:"Supports heart, brain, and joint health.", dose:"1000 mg · softgel", category:"botanicals" },
+    { slug:"curcumin", name:"Curcumin", benefit:"Supports a healthy inflammatory response.", dose:"500 mg · capsule", category:"botanicals" },
+    { slug:"ashwagandha", name:"Ashwagandha", benefit:"Supports stress resilience and healthy cortisol balance.", dose:"600 mg · capsule", category:"botanicals" },
+    { slug:"ginger-extract", name:"Ginger Extract", benefit:"Supports digestive comfort.", dose:"250 mg · capsule", category:"botanicals" },
+    { slug:"probiotic", name:"Probiotic", benefit:"Supports gut microbiome balance and digestive health.", dose:"10B CFU · capsule", category:"botanicals" }
+  ];
+  PRODUCTS.forEach(function(p, i){
+    var siblings = PRODUCTS.filter(function(o){ return o.category === p.category; });
+    p.defaultOrder = siblings.indexOf(p);
+  });
+
+  /* Current stock status — edit this object directly and re-open index.html
+     (or ask Claude to update it and redeploy) any time stock changes. */
+  var STATUS = {
+    "vitamin-d3": "in-stock",
+    "vitamin-c": "in-stock",
+    "vitamin-b12": "in-stock",
+    "vitamin-b6": "in-stock",
+    "folate-b9": "in-stock",
+    "iodine": "in-stock"
+  };
+
+  var STATUS_LABEL = {
+    "coming-soon": "Coming soon",
+    "in-stock": "In stock",
+    "low-stock": "Low stock",
+    "out-of-stock": "Out of stock"
+  };
+  var PLACEHOLDER_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.8"/><path d="m21 15-5-5L5 21"/></svg>';
+
+  function buildRow(product){
+    var status = STATUS[product.slug] || "coming-soon";
+
+    var row = document.createElement("div");
+    row.className = "catalog-row";
+
+    var thumb = document.createElement("div");
+    thumb.className = "catalog-thumb";
+    thumb.innerHTML = PLACEHOLDER_ICON;
+
+    var nameWrap = document.createElement("div");
+    nameWrap.className = "name-wrap";
+    var nameEl = document.createElement("span");
+    nameEl.className = "name";
+    nameEl.textContent = product.name;
+    var benefitEl = document.createElement("span");
+    benefitEl.className = "benefit";
+    benefitEl.textContent = product.benefit;
+    nameWrap.appendChild(nameEl);
+    nameWrap.appendChild(benefitEl);
+
+    var meta = document.createElement("div");
+    meta.className = "meta";
+    var doseEl = document.createElement("span");
+    doseEl.className = "dose";
+    doseEl.textContent = product.dose;
+    meta.appendChild(doseEl);
+
+    if(status === "in-stock" || status === "low-stock"){
+      var orderBtn = document.createElement("a");
+      orderBtn.className = "order-btn";
+      orderBtn.textContent = "Request to order";
+      orderBtn.href = buildMailto(
+        "Order request: " + product.name,
+        "Hi,\n\nI'd like to order " + product.name +
+          (product.dose ? " (" + product.dose + ")" : "") +
+          ".\n\nPlease let me know how to proceed.\n\nThanks!"
+      );
+      meta.appendChild(orderBtn);
+    }
+
+    var pill = document.createElement("span");
+    pill.className = "status-pill";
+    pill.dataset.status = status;
+    pill.textContent = STATUS_LABEL[status] || STATUS_LABEL["coming-soon"];
+    meta.appendChild(pill);
+
+    row.appendChild(thumb);
+    row.appendChild(nameWrap);
+    row.appendChild(meta);
+    return row;
+  }
+
+  var byCategory = {};
+  PRODUCTS.slice().sort(function(a, b){ return a.defaultOrder - b.defaultOrder; }).forEach(function(product){
+    if(!byCategory[product.category]) byCategory[product.category] = [];
+    byCategory[product.category].push(product);
+  });
+  Object.keys(byCategory).forEach(function(category){
+    var list = document.querySelector('.catalog-list[data-category="' + category + '"]');
+    if(!list) return;
+    byCategory[category].forEach(function(product){
+      list.appendChild(buildRow(product));
+    });
+  });
+})();
+</script>
+</body>
+</html>
