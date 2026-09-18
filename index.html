@@ -395,6 +395,12 @@
   }
   .order-btn:hover{filter:brightness(1.06);}
   .order-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .quick-add-btn{border:none;cursor:pointer;font-family:inherit;}
+  .quick-add-btn:disabled{
+    cursor:not-allowed;filter:none;
+    background:var(--surface);color:var(--bone-dim);
+    border:1px solid var(--line-bright);
+  }
 
   /* ---------- certificates of analysis ---------- */
   .coa-add-form{
@@ -1324,6 +1330,24 @@
         renderAll();
       });
       meta.appendChild(removeBtn);
+    } else {
+      var quickAddBtn = document.createElement("button");
+      quickAddBtn.type = "button";
+      quickAddBtn.className = "order-btn quick-add-btn";
+      var quickAvailable = product.status === "in-stock" || product.status === "low-stock";
+      quickAddBtn.disabled = !quickAvailable;
+      quickAddBtn.textContent = quickAvailable ? "+ Add" : "Unavailable";
+      quickAddBtn.setAttribute("aria-label", "Add " + product.name + " to cart");
+      quickAddBtn.addEventListener("click", function(e){
+        e.stopPropagation();
+        if(!quickAvailable) return;
+        addToCart(product, 1);
+        quickAddBtn.textContent = "Added!";
+        setTimeout(function(){
+          quickAddBtn.textContent = "+ Add";
+        }, 1000);
+      });
+      meta.appendChild(quickAddBtn);
     }
 
     row.appendChild(thumb);
