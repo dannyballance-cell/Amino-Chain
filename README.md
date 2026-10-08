@@ -69,7 +69,10 @@ pick them up: **Deploys** → **Trigger deploy** → **Deploy site**.
    - **Drag a row** up or down to reorder it within its category.
    - **Click a product's photo** to upload a new one (max 5MB — it's
      automatically shrunk in the browser before uploading).
-   - **Click the name, description, or dose** to edit that text directly.
+   - **Click the name, description, dose, or price** to edit that text
+     directly. Price is free text (e.g. "$24.99"), so you can include
+     anything that reads naturally — it only shows on the public site when
+     it's set.
    - **Click the status pill** (e.g. "Coming soon") to cycle it through
      Coming soon → In stock → Low stock → Out of stock.
    - **Click Remove** on a row to pull it from the public catalog (it moves

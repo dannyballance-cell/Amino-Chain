@@ -269,6 +269,7 @@
   .catalog-row .benefit{font-size:.82rem;color:var(--bone-dim);max-width:42ch;}
   .catalog-row .meta{display:flex;align-items:center;gap:10px;flex:none;}
   .catalog-row .dose{font-family:var(--font-mono);font-size:.78rem;color:var(--gold);white-space:nowrap;}
+  .catalog-row .price{font-weight:800;font-size:.9rem;color:var(--bone);white-space:nowrap;}
   .name-wrap.editable{gap:4px;}
   .name-wrap.editable input.name-input{
     font-family:inherit;font-weight:700;font-size:.96rem;color:var(--bone);
@@ -292,6 +293,13 @@
   }
   .catalog-row .meta input.dose-input:hover{border-color:var(--line);}
   .catalog-row .meta input.dose-input:focus{outline:none;border-color:var(--gold);background:var(--surface);}
+  .catalog-row .meta input.price-input{
+    font-family:inherit;font-weight:800;font-size:.9rem;color:var(--bone);
+    background:none;border:1px solid transparent;border-radius:4px;
+    padding:2px 4px;margin:-2px -4px;width:7ch;text-align:right;
+  }
+  .catalog-row .meta input.price-input:hover{border-color:var(--line);}
+  .catalog-row .meta input.price-input:focus{outline:none;border-color:var(--gold);background:var(--surface);}
   .catalog-admin-hint{
     font-size:.82rem;color:var(--gold-dim);
     margin:-24px 0 32px;
@@ -637,6 +645,7 @@
   .product-modal-thumb img{width:100%;height:100%;object-fit:contain;display:block;}
   .product-modal-thumb svg{width:40px;height:40px;}
   .product-modal-card h3{font-size:1.4rem;margin-bottom:6px;padding-right:20px;}
+  .product-modal-price{font-weight:800;font-size:1.2rem;color:var(--bone);margin-bottom:6px;}
   .product-modal-dose{font-family:var(--font-mono);font-size:.82rem;color:var(--gold);margin-bottom:14px;}
   .product-modal-benefit{color:var(--bone-dim);font-size:.94rem;margin-bottom:14px;}
   .product-modal-status{margin-bottom:20px;}
@@ -764,7 +773,7 @@
 
       <div class="admin-toolbar" id="admin-toolbar" hidden>
         <span class="admin-status" id="admin-status-text">Admin mode</span>
-        <span>Drag a row to reorder within its category. Click a photo to change it. Click the status pill to cycle stock status. Click a name, description, or dose to edit it.</span>
+        <span>Drag a row to reorder within its category. Click a photo to change it. Click the status pill to cycle stock status. Click a name, description, dose, or price to edit it.</span>
         <div class="admin-toolbar-actions">
           <button type="button" class="btn btn-primary btn-sm" id="admin-save-btn" disabled>Save changes</button>
           <button type="button" class="btn btn-secondary btn-sm" id="admin-signout-btn">Sign out</button>
@@ -935,6 +944,7 @@
     <button type="button" class="product-modal-close" id="product-modal-close" aria-label="Close">&times;</button>
     <div class="product-modal-thumb" id="product-modal-thumb"></div>
     <h3 id="product-modal-name"></h3>
+    <p class="product-modal-price" id="product-modal-price" hidden></p>
     <p class="product-modal-dose" id="product-modal-dose"></p>
     <p class="product-modal-benefit" id="product-modal-benefit"></p>
     <div class="product-modal-status" id="product-modal-status"></div>
@@ -1306,6 +1316,29 @@
 
     var meta = document.createElement("div");
     meta.className = "meta";
+    if(state.isAdmin){
+      var priceInput = document.createElement("input");
+      priceInput.type = "text";
+      priceInput.className = "price-input";
+      priceInput.value = product.price || "";
+      priceInput.placeholder = "$0.00";
+      priceInput.draggable = false;
+      priceInput.setAttribute("aria-label", "Price");
+      priceInput.addEventListener("mousedown", function(e){ e.stopPropagation(); });
+      priceInput.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); priceInput.blur(); } });
+      priceInput.addEventListener("change", function(){
+        product.price = priceInput.value.trim();
+        priceInput.value = product.price;
+        markDirty();
+      });
+      meta.appendChild(priceInput);
+    } else if(product.price){
+      var priceEl = document.createElement("span");
+      priceEl.className = "price";
+      priceEl.textContent = product.price;
+      meta.appendChild(priceEl);
+    }
+
     if(state.isAdmin){
       var doseInput = document.createElement("input");
       doseInput.type = "text";
@@ -1828,6 +1861,13 @@
     }
 
     document.getElementById("product-modal-name").textContent = product.name;
+    var priceEl = document.getElementById("product-modal-price");
+    if(product.price){
+      priceEl.textContent = product.price;
+      priceEl.hidden = false;
+    } else {
+      priceEl.hidden = true;
+    }
     document.getElementById("product-modal-dose").textContent = product.dose;
     document.getElementById("product-modal-benefit").textContent = product.benefit;
 
