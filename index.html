@@ -590,6 +590,19 @@
   .admin-toolbar[hidden]{display:none;}
   .admin-toolbar .admin-status{font-weight:700;color:var(--gold);}
   .admin-toolbar-actions{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap;}
+  .admin-toast{
+    position:fixed;left:50%;bottom:28px;z-index:999;
+    transform:translate(-50%, 20px);
+    max-width:90vw;
+    background:var(--ink);color:var(--gold);
+    border:1px solid var(--line-bright);
+    padding:.7em 1.2em;border-radius:10px;
+    font-size:.86rem;font-weight:700;text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .admin-toast.show{opacity:1;transform:translate(-50%, 0);}
 
   /* ---------- product detail + cart modals ---------- */
   .catalog-row.clickable{cursor:pointer;}
@@ -1050,9 +1063,25 @@
     });
   }
 
+  var adminToast = document.createElement("div");
+  adminToast.className = "admin-toast";
+  document.body.appendChild(adminToast);
+  var adminToastTimer = null;
+
   function setAdminStatus(text){
     var el = document.getElementById("admin-status-text");
     if(el) el.textContent = text;
+
+    // The toolbar status text above can scroll out of view on a long
+    // catalog, so mirror it in a fixed-position toast that's always
+    // visible — this is the only feedback for things like photo
+    // uploads, so it needs to be impossible to miss.
+    adminToast.textContent = text;
+    adminToast.classList.add("show");
+    if(adminToastTimer) clearTimeout(adminToastTimer);
+    adminToastTimer = setTimeout(function(){
+      adminToast.classList.remove("show");
+    }, 4000);
   }
 
   function markDirty(){
