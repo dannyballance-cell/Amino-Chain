@@ -266,7 +266,11 @@
   .thumb-edit-btn svg{width:16px;height:16px;}
   .catalog-row .name-wrap{display:flex;flex-direction:column;gap:3px;flex:1;min-width:170px;}
   .catalog-row .name{font-weight:700;font-size:.96rem;}
-  .catalog-row .benefit{font-size:.82rem;color:var(--bone-dim);max-width:42ch;}
+  .catalog-row .benefit{
+    font-size:.82rem;color:var(--bone-dim);max-width:42ch;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+    overflow:hidden;
+  }
   .catalog-row .meta{display:flex;align-items:center;gap:10px;flex:none;}
   .catalog-row .dose{font-family:var(--font-mono);font-size:.78rem;color:var(--gold);white-space:nowrap;}
   .catalog-row .price{font-weight:800;font-size:.9rem;color:var(--bone);white-space:nowrap;}
@@ -680,6 +684,7 @@
   .cart-item-info{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
   .cart-item-name{font-weight:700;font-size:.9rem;}
   .cart-item-dose{font-family:var(--font-mono);font-size:.74rem;color:var(--bone-dim);}
+  .cart-item-price{font-size:.78rem;color:var(--gold);font-weight:700;}
   .cart-item-remove{
     appearance:none;border:none;background:none;color:var(--bone-dim);
     font-size:1.2rem;cursor:pointer;line-height:1;padding:4px;flex:none;
@@ -687,6 +692,12 @@
   .cart-item-remove:hover{color:var(--danger);}
   .cart-empty{color:var(--bone-dim);font-size:.9rem;text-align:center;padding:20px 0;}
   .cart-empty[hidden]{display:none;}
+  .cart-total-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 0;border-top:1px solid var(--line);
+    font-weight:800;font-size:1rem;color:var(--bone);
+  }
+  .cart-total-row[hidden]{display:none;}
   .cart-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;}
   .cart-total-count{font-size:.84rem;color:var(--bone-dim);}
   .cart-status{margin-top:12px;font-size:.84rem;color:var(--bone-dim);min-height:1.2em;}
@@ -966,6 +977,10 @@
     <h3>Your Cart</h3>
     <div class="cart-items" id="cart-items"></div>
     <p class="cart-empty" id="cart-empty">Your cart is empty.</p>
+    <div class="cart-total-row" id="cart-total-row" hidden>
+      <span>Total</span>
+      <span id="cart-total-price"></span>
+    </div>
     <div class="cart-footer">
       <span class="cart-total-count" id="cart-total-count"></span>
       <button type="button" class="btn btn-primary" id="cart-request-btn">Request to Order</button>
@@ -1734,14 +1749,30 @@
     badge.hidden = total === 0;
   }
 
+  function parsePriceValue(str){
+    if(!str) return null;
+    var match = String(str).match(/\d+(\.\d+)?/);
+    if(!match) return null;
+    var num = parseFloat(match[0]);
+    return isNaN(num) ? null : num;
+  }
+
+  function formatPriceValue(num){
+    return "$" + num.toFixed(2);
+  }
+
   function renderCart(){
     var itemsEl = document.getElementById("cart-items");
     var emptyEl = document.getElementById("cart-empty");
     var totalEl = document.getElementById("cart-total-count");
+    var totalRow = document.getElementById("cart-total-row");
+    var totalPriceEl = document.getElementById("cart-total-price");
     var requestBtn = document.getElementById("cart-request-btn");
     if(!itemsEl) return;
 
     itemsEl.innerHTML = "";
+    var grandTotal = 0;
+    var haveAnyPrice = false;
     state.cart.forEach(function(item){
       var row = document.createElement("div");
       row.className = "cart-item";
@@ -1756,6 +1787,17 @@
       doseEl.textContent = item.dose || "";
       info.appendChild(nameEl);
       info.appendChild(doseEl);
+
+      var product = state.products.find(function(p){ return p.slug === item.slug; });
+      var unitPrice = product ? parsePriceValue(product.price) : null;
+      if(unitPrice !== null){
+        haveAnyPrice = true;
+        grandTotal += unitPrice * item.qty;
+        var priceEl = document.createElement("span");
+        priceEl.className = "cart-item-price";
+        priceEl.textContent = formatPriceValue(unitPrice) + (item.qty > 1 ? " each" : "");
+        info.appendChild(priceEl);
+      }
 
       var stepper = document.createElement("div");
       stepper.className = "qty-stepper small";
@@ -1793,6 +1835,14 @@
     if(totalEl){
       var total = cartTotalQty();
       totalEl.textContent = total === 0 ? "" : (total + (total === 1 ? " item" : " items"));
+    }
+    if(totalRow && totalPriceEl){
+      if(haveAnyPrice && state.cart.length > 0){
+        totalPriceEl.textContent = formatPriceValue(grandTotal);
+        totalRow.hidden = false;
+      } else {
+        totalRow.hidden = true;
+      }
     }
     if(requestBtn) requestBtn.disabled = state.cart.length === 0;
   }
