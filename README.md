@@ -109,7 +109,7 @@ Instead:
 4. That one click does two things: saves the order to your **Order
    Requests** admin panel, and opens the visitor's email app with one
    message listing everything in the cart, addressed to
-   aminochain2026@gmail.com. Either one working is enough for you to see
+   aminochainper@gmail.com. Either one working is enough for you to see
    the request — the two are redundant on purpose.
 
 ## Deploying changes to the code itself
