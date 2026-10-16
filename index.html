@@ -152,33 +152,23 @@
   /* ---------- hero ---------- */
   .hero{position:relative;overflow:hidden;padding-block:60px 64px;isolation:isolate;}
   @media (min-width:760px){ .hero{padding-block:88px 90px;} }
-  .hero-image-wrap{
-    position:absolute;inset:0;z-index:-3;overflow:hidden;
-  }
   .hero-image{
-    position:absolute;inset:-50%;
+    position:absolute;inset:0;z-index:-3;
     background-image:
       linear-gradient(180deg, rgba(20,15,11,0.5) 0%, rgba(20,15,11,0.72) 60%, rgba(20,15,11,0.95) 100%),
       url('assets/hero-brand.jpg');
     background-size:cover;
     background-position:center 35%;
-    transform-origin:center center;
   }
+  .hero-molecules{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;}
+  .hero-molecule{position:absolute;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.35));opacity:.75;}
   @media (prefers-reduced-motion:no-preference){
-    .hero-image{
-      animation: heroChainSpin 110s linear infinite, heroChainDrift 42s ease-in-out infinite;
-    }
+    .hero-molecule{animation:heroMoleculeFloat ease-in-out infinite;}
   }
-  @keyframes heroChainSpin{
-    from{ rotate:0deg; }
-    to{ rotate:360deg; }
-  }
-  @keyframes heroChainDrift{
-    0%{ translate:0% 0%; }
-    25%{ translate:3% -2%; }
-    50%{ translate:0% -4%; }
-    75%{ translate:-3% -2%; }
-    100%{ translate:0% 0%; }
+  @keyframes heroMoleculeFloat{
+    0%{ transform:translate(0,0) rotate(0deg); }
+    50%{ transform:translate(3%,-9%) rotate(10deg); }
+    100%{ transform:translate(0,0) rotate(0deg); }
   }
   .hero-glow{
     position:absolute;inset:-15% -10%;z-index:-2;
@@ -758,10 +748,38 @@
 
 <main id="top">
   <section class="hero">
-    <div class="hero-image-wrap" aria-hidden="true">
-      <div class="hero-image"></div>
-    </div>
+    <div class="hero-image" aria-hidden="true"></div>
     <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-molecules" aria-hidden="true">
+      <svg class="hero-molecule" style="top:14%;left:7%;width:50px;height:50px;animation-duration:17s;animation-delay:-2s;" viewBox="0 0 64 64">
+        <path d="M10 48 L26 32 L40 42 L54 18" stroke="rgba(243,236,222,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="10" cy="48" r="6" fill="#D4A24C"/>
+        <circle cx="26" cy="32" r="7" fill="#1A130E" stroke="rgba(243,236,222,0.5)" stroke-width="1.5"/>
+        <circle cx="40" cy="42" r="6" fill="#FF8A3D"/>
+        <circle cx="54" cy="18" r="6" fill="#E8420C"/>
+      </svg>
+      <svg class="hero-molecule" style="top:62%;left:10%;width:36px;height:36px;animation-duration:13s;animation-delay:-6s;" viewBox="0 0 64 64">
+        <path d="M12 20 L30 30 L22 50 L48 44" stroke="rgba(243,236,222,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="12" cy="20" r="6" fill="#E8420C"/>
+        <circle cx="30" cy="30" r="7" fill="#1A130E" stroke="rgba(243,236,222,0.5)" stroke-width="1.5"/>
+        <circle cx="22" cy="50" r="6" fill="#D4A24C"/>
+        <circle cx="48" cy="44" r="6" fill="#FF8A3D"/>
+      </svg>
+      <svg class="hero-molecule" style="top:18%;right:8%;width:46px;height:46px;animation-duration:19s;animation-delay:-11s;" viewBox="0 0 64 64">
+        <path d="M54 50 L38 36 L44 16 L18 22" stroke="rgba(243,236,222,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="54" cy="50" r="6" fill="#FF8A3D"/>
+        <circle cx="38" cy="36" r="7" fill="#1A130E" stroke="rgba(243,236,222,0.5)" stroke-width="1.5"/>
+        <circle cx="44" cy="16" r="6" fill="#D4A24C"/>
+        <circle cx="18" cy="22" r="6" fill="#E8420C"/>
+      </svg>
+      <svg class="hero-molecule" style="bottom:12%;right:12%;width:40px;height:40px;animation-duration:15s;animation-delay:-4s;" viewBox="0 0 64 64">
+        <path d="M14 14 L32 24 L26 46 L52 40" stroke="rgba(243,236,222,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="6" fill="#D4A24C"/>
+        <circle cx="32" cy="24" r="7" fill="#1A130E" stroke="rgba(243,236,222,0.5)" stroke-width="1.5"/>
+        <circle cx="26" cy="46" r="6" fill="#E8420C"/>
+        <circle cx="52" cy="40" r="6" fill="#FF8A3D"/>
+      </svg>
+    </div>
     <div class="hero-content">
       <h1><span data-ck="hero.titleMain">Amino Chain</span><span class="accent" data-ck="hero.titleAccent">Performance</span></h1>
       <div class="hero-sub" data-ck="hero.subtitle">Rebuild &nbsp;&middot;&nbsp; Restore &nbsp;&middot;&nbsp; Outperform</div>
