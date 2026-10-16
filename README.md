@@ -15,9 +15,13 @@ new one, and remove/restore products — no code editing required.
   - `get-products.js` / `save-products.js` — reads/writes the live product
     catalog (stored in Netlify Blobs, a built-in key-value store — no
     database to set up)
+  - `get-content.js` / `save-content.js` — reads/writes every other bit of
+    editable text on the site (headings, paragraphs, button labels, footer,
+    FAQ, etc.)
   - `upload-photo.js` / `get-photo.js` — stores and serves product photos
   - `products-data.js` — the starting catalog, used only the first time the
     site runs (before you've saved anything from the admin panel)
+  - `content-data.js` — the starting site copy, used the same way
 - `netlify.toml`, `package.json` — build/config for Netlify
 
 ## One-time setup
@@ -64,9 +68,17 @@ pick them up: **Deploys** → **Trigger deploy** → **Deploy site**.
 1. Open your live site and scroll to the very bottom — click the small
    **Admin** link next to the copyright line.
 2. Enter the password you set as `ADMIN_PASSWORD`.
-3. Once signed in you'll see a toolbar above the catalog and each product
-   row gets new controls:
-   - **Drag a row** up or down to reorder it within its category.
+3. Once signed in, **every piece of text on the site becomes clickable** —
+   the hero heading, the Rebuild/Restore/Outperform pillars, the "What
+   we're launching with" intro, the testimonial cards, the FAQ, the footer,
+   literally any heading, paragraph, or button label. Click directly into
+   it on the page, type your change, then click elsewhere (or press Enter)
+   to lock it in — the text you're hovering over gets a faint dashed
+   outline so you can see what's editable.
+4. The product catalog also gets its own controls:
+   - **+ Add product**, below the catalog, adds a blank new product you can
+     fill in right away — there's no limit to how many you can add.
+   - **Drag a row** up or down to reorder it anywhere in the list.
    - **Click a product's photo** to upload a new one (max 5MB — it's
      automatically shrunk in the browser before uploading).
    - **Click the name, description, dose, or price** to edit that text
@@ -79,15 +91,16 @@ pick them up: **Deploys** → **Trigger deploy** → **Deploy site**.
      to a "Removed products" panel where you can restore it any time).
    - Drag a row onto the **trash zone** below the catalog as another way to
      remove it.
-4. Click **Save changes** to publish everything to the live site. Changes
-   aren't public until you save.
-5. Further down, in **Certificates of Analysis**, add a label and a PDF or
+5. Click **Save changes** to publish everything — product edits and any
+   text you edited on the page — to the live site. Changes aren't public
+   until you save.
+6. Further down, in **Certificates of Analysis**, add a label and a PDF or
    image file and click **Add certificate** — this publishes immediately,
    no separate Save needed.
-6. Also while signed in, an **Order Requests** panel appears above the
+7. Also while signed in, an **Order Requests** panel appears above the
    catalog listing every cart a customer has submitted (see below), with a
    **Dismiss** button once you've followed up on one.
-7. Click **Sign out** when you're done. Your session also expires on its
+8. Click **Sign out** when you're done. Your session also expires on its
    own after 12 hours.
 
 Anyone without the password just sees the normal public site — no admin
