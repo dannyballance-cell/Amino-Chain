@@ -34,7 +34,7 @@ const DEFAULT_CONTENT = {
   "coas.emptyText": "No certificates published yet — check back once testing is complete.",
 
   "results.heading": "Real feedback, coming soon.",
-  "results.intro": "We'll feature genuine tester quotes here once Vibrant Heat ships. The cards below are placeholders — swap them for real testimonials when you have them.",
+  "results.intro": "We'll feature genuine tester quotes here once these products ship. The cards below are placeholders — swap them for real testimonials when you have them.",
   "results.card1.flag": "Placeholder",
   "results.card1.quote": "Add a real customer quote here once early testers have tried the product.",
   "results.card1.name": "[Name], [Role]",
@@ -46,11 +46,11 @@ const DEFAULT_CONTENT = {
   "results.card3.name": "[Name], [Role]",
 
   "faq.heading": "Questions, answered",
-  "faq.q1": "What makes the Vibrant Heat Series different?",
+  "faq.q1": "What makes Amino Chain Performance different?",
   "faq.a1": "Every formula is built around complete amino acid chains and a heat-activated delivery system, with full-transparency labels and no proprietary blends across Performance, Recovery & Restore, and Skincare.",
   "faq.q2": "Will you publish lab results?",
   "faq.a2": "Yes — every lot, across every line, will ship with a public certificate of analysis from an independent third-party lab.",
-  "faq.q3": "When does the Vibrant Heat Series launch?",
+  "faq.q3": "When does Amino Chain Performance launch?",
   "faq.a3": "We're finalizing formulation and testing now — check back here for updates as products come online.",
 
   "footer.tagline": "Rebuild. Restore. Outperform. Chain-verified amino formulas for performance, recovery, and skincare.",
@@ -60,7 +60,6 @@ const DEFAULT_CONTENT = {
   "footer.coasLink": "Certificates of Analysis",
   "footer.contactLink": "Contact",
   "footer.copyright": "© 2026 Amino Chain Performance. All rights reserved.",
-  "footer.seriesTag": "Vibrant Heat Series",
   "footer.disclaimer": "These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease.",
 };
 
