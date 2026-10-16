@@ -152,13 +152,33 @@
   /* ---------- hero ---------- */
   .hero{position:relative;overflow:hidden;padding-block:60px 64px;isolation:isolate;}
   @media (min-width:760px){ .hero{padding-block:88px 90px;} }
+  .hero-image-wrap{
+    position:absolute;inset:0;z-index:-3;overflow:hidden;
+  }
   .hero-image{
-    position:absolute;inset:0;z-index:-3;
+    position:absolute;inset:-50%;
     background-image:
       linear-gradient(180deg, rgba(20,15,11,0.5) 0%, rgba(20,15,11,0.72) 60%, rgba(20,15,11,0.95) 100%),
       url('assets/hero-brand.jpg');
     background-size:cover;
     background-position:center 35%;
+    transform-origin:center center;
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .hero-image{
+      animation: heroChainSpin 110s linear infinite, heroChainDrift 42s ease-in-out infinite;
+    }
+  }
+  @keyframes heroChainSpin{
+    from{ rotate:0deg; }
+    to{ rotate:360deg; }
+  }
+  @keyframes heroChainDrift{
+    0%{ translate:0% 0%; }
+    25%{ translate:3% -2%; }
+    50%{ translate:0% -4%; }
+    75%{ translate:-3% -2%; }
+    100%{ translate:0% 0%; }
   }
   .hero-glow{
     position:absolute;inset:-15% -10%;z-index:-2;
@@ -738,7 +758,9 @@
 
 <main id="top">
   <section class="hero">
-    <div class="hero-image" aria-hidden="true"></div>
+    <div class="hero-image-wrap" aria-hidden="true">
+      <div class="hero-image"></div>
+    </div>
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="hero-content">
       <h1><span data-ck="hero.titleMain">Amino Chain</span><span class="accent" data-ck="hero.titleAccent">Performance</span></h1>
