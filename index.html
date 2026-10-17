@@ -199,6 +199,7 @@
 
   /* ---------- pillars ---------- */
   .pillars{border-top:1px solid var(--line);}
+  .pillars-banner-wrap{position:relative;margin-bottom:40px;}
   .pillars-banner{
     display:block;
     width:100%;
@@ -207,7 +208,44 @@
     border-radius:12px;
     border:1px solid var(--line-bright);
     box-shadow:0 20px 50px rgba(0,0,0,0.4);
-    margin-bottom:40px;
+  }
+  .pillars-flash{
+    position:absolute;inset:0;border-radius:12px;overflow:hidden;
+    background-image:url('assets/pillars-strip.jpg');
+    background-size:100% 100%;
+    filter:brightness(2.6) saturate(1.5);
+    mix-blend-mode:screen;
+    opacity:0;
+    pointer-events:none;
+  }
+  .pillars-flash-rebuild{
+    -webkit-mask-image:radial-gradient(ellipse 34% 60% at 29% 46%, black 0%, black 55%, transparent 85%);
+    mask-image:radial-gradient(ellipse 34% 60% at 29% 46%, black 0%, black 55%, transparent 85%);
+  }
+  .pillars-flash-restore{
+    -webkit-mask-image:radial-gradient(ellipse 20% 62% at 49% 42%, black 0%, black 55%, transparent 85%);
+    mask-image:radial-gradient(ellipse 20% 62% at 49% 42%, black 0%, black 55%, transparent 85%);
+  }
+  .pillars-flash-outperform{
+    -webkit-mask-image:radial-gradient(ellipse 18% 62% at 79% 46%, black 0%, black 55%, transparent 85%);
+    mask-image:radial-gradient(ellipse 18% 62% at 79% 46%, black 0%, black 55%, transparent 85%);
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .pillars-flash-rebuild{animation:pillarFlash 6s ease-in-out infinite;}
+    .pillars-flash-restore{animation:pillarFlash 6.5s ease-in-out infinite;animation-delay:-2.2s;}
+    .pillars-flash-outperform{animation:pillarFlash 5.5s ease-in-out infinite;animation-delay:-4s;}
+  }
+  @keyframes pillarFlash{
+    0%, 100%{ opacity:0; }
+    4%{ opacity:.95; }
+    8%{ opacity:.25; }
+    13%{ opacity:.85; }
+    18%{ opacity:0; }
+    46%{ opacity:0; }
+    51%{ opacity:1; }
+    56%{ opacity:.3; }
+    61%{ opacity:.9; }
+    67%{ opacity:0; }
   }
   .pillars-grid{
     display:grid;grid-template-columns:1fr;gap:1px;
@@ -751,7 +789,12 @@
 
   <section class="pillars">
     <div class="wrap">
-      <img class="pillars-banner" src="assets/pillars-strip.jpg" alt="Rebuild, Restore, Outperform &mdash; the three pillars of Amino Chain Performance, shown with their amino chain, cellular, and energy icons.">
+      <div class="pillars-banner-wrap">
+        <img class="pillars-banner" src="assets/pillars-strip.jpg" alt="Rebuild, Restore, Outperform &mdash; the three pillars of Amino Chain Performance, shown with their amino chain, cellular, and energy icons.">
+        <div class="pillars-flash pillars-flash-rebuild" aria-hidden="true"></div>
+        <div class="pillars-flash pillars-flash-restore" aria-hidden="true"></div>
+        <div class="pillars-flash pillars-flash-outperform" aria-hidden="true"></div>
+      </div>
       <div class="pillars-grid" id="pillars-grid">
         <div class="pillar p-rebuild">
           <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="#FF8A3D" stroke-width="2.5" stroke-linecap="round">
